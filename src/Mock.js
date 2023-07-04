@@ -3,11 +3,13 @@ const user =
 [
   {
     name: "Luis",
+    lastName: "Fetuchinni",
     userName: "luisx00x",
     password: "12345"
   },
   {
     name: "Anita",
+    lastName: "Fibonacci",
     userName: "Pequeñuela",
     password: "Hakunamatata"
   }
@@ -34,6 +36,27 @@ const apoderados = [
   }
 ]
 
+const materias = [
+  {
+    courseName: "matematica",
+  },
+  {
+    courseName: "fisica"
+  },
+  {
+    courseName: "quimica"
+  }
+]
+
+const profesores = [
+  {
+    email: "julio@mail.com"
+  },
+  {
+    email: "antonio@mail.com"
+  }
+]
+
 const estudiantes = [
   {
     fatherName: "Luis",
@@ -46,5 +69,5 @@ const estudiantes = [
 ]
 
 module.exports = {
-  user,rols, estudiantes, apoderados
+  user,rols, estudiantes, apoderados, profesores, materias
 }

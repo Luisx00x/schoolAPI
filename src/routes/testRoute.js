@@ -1,11 +1,84 @@
 
-const { User, Rols, Student, Representative } = require('../db.js');
+const { User, Rols, Student, Representative, Teacher, Course, Year, Grade, Section, Homework, Calification } = require('../db.js');
 
 async function test(req, res, next) {
 
   try{
 
-      const response = await User.findAll({
+    const response = await Calification.findAll({
+      include: [
+        {
+          model: Student,
+          include: [
+            {
+              model: User
+            }
+          ]
+        },
+        {
+          model: Teacher,
+          include: [
+            {
+              model: User
+            }
+          ]
+        },
+        {
+          model: Course
+        }
+      ]
+    })
+
+
+   /*  const response = await Course.findAll({
+      include: [
+        {
+          model:Section,
+          include: [
+            {
+              model: Grade,
+              include: [
+                {
+                  model: Year
+                }
+              ]
+            }
+          ]
+        },
+        {
+          model: Student
+        }
+      ]
+    })
+ */
+    //const response = await Grade.findAll()
+
+      /* const response = await User.findAll({
+        where:{
+          RolId: 3
+        },
+        include: [
+          {
+            model: Rols
+          },
+          {
+            model: Teacher,
+            include: [
+              {
+                model: Course,
+                include: [
+                  {
+                    model: Student
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      })
+ */
+      //Cola de busqueda
+     /*  const response = await User.findAll({
         where:{
           RolId: 2
         },
@@ -27,7 +100,7 @@ async function test(req, res, next) {
             ]
           }
         ]
-      })
+      }) */
 
       /* const response = await User.findOne({
         include: [

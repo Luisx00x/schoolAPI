@@ -41,7 +41,19 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map( (entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { User, Rols, Student, Representative } = sequelize.models;
+const { 
+  User,
+  Rols,
+  Student,
+  Representative,
+  Teacher,
+  Course,
+  Year,
+  Grade,
+  Section,
+  Homework,
+  Calification
+  } = sequelize.models;
 
 //* Relaciones
 //Rols-Usuarios Catalogo
@@ -60,8 +72,50 @@ Representative.belongsTo(User);
 Representative.hasMany(Student);
 Student.belongsTo(Representative);
 
-/* Rols.belongsToMany(Student, {through: 'RolStudent'});
-Student.belongsToMany(Rols, {through: 'RolStudent'}); */
+//Un profesor tiene un usuario
+User.hasOne(Teacher);
+Teacher.belongsTo(User);
+
+//Un profesor da clases en muchos cursos - Un curso puede tener muchos profesores
+Teacher.belongsToMany(Course, {through: "Teacher_Course" });
+Course.belongsToMany(Teacher, {through: "Teacher_Course"});
+
+//Un Curso tiene muchos alumnos - Un alumno tiene muchos cursos
+Student.belongsToMany(Course, {through: "Student_Course"});
+Course.belongsToMany(Student, {through: "Student_Course"});
+
+//Un año escolar tiene muchos grados - Un grado tiene un año escolar
+Year.hasMany(Grade);
+Grade.belongsTo(Year);
+
+//Un grado tiene varias secciones - una seccion tiene un grado
+Grade.hasMany(Section);
+Section.belongsTo(Grade);
+
+//? Revisar
+//Un curso tiene varias secciones - una seccion pertenece a un curso
+Course.hasMany(Section);
+Section.belongsTo(Course);
+
+//Una tarea pertenece a un profesor - un profesor pertenece a una tarea
+Teacher.hasOne(Homework);
+Homework.belongsTo(Teacher);
+
+//Un curso puede tener multiples tareas - una tarea pertenece a un curso
+Course.hasMany(Homework);
+Homework.belongsTo(Course);
+
+//una calificación pertenece a un alumno - un alumno tiene varias calificaciones
+Student.hasMany(Calification);
+Calification.belongsTo(Student);
+
+//Una calificacion pertenece a un profesor - un profesor hace varias calificaciones
+Teacher.hasMany(Calification);
+Calification.belongsTo(Teacher);
+
+//Un curso tiene muchas calificaciones - una calificacion pertenece a un curso
+Course.hasMany(Calification);
+Calification.belongsTo(Course);
 
 module.exports = {
   ...sequelize.models,
