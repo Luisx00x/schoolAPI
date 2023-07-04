@@ -5,6 +5,14 @@ module.exports = sequelize => {
     courseName:{
       type: DataTypes.STRING,
       allowNull: false
+    },
+    init: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    end: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   },
   {
