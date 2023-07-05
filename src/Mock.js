@@ -38,7 +38,7 @@ const apoderados = [
 
 const materias = [
   {
-    courseName: "matematica",
+    courseName: "matematica"
   },
   {
     courseName: "fisica"

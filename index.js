@@ -1,7 +1,7 @@
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 //MOCK
-const { User, Rols, Student, Representative, Teacher, Course, Year, Grade, Section, Homework, Calification } = require('./src/db.js');
+const { User, Rols, Student, Representative, Teacher, Course, Year, Grade, Section, Homework, Calification, Absences } = require('./src/db.js');
 const { user, rols, estudiantes, apoderados, profesores, materias} = require('./src/Mock.js');
 //*
 
@@ -52,13 +52,18 @@ conn.sync({force: true})
     const profe = await Teacher.create(ele)
     await profe.setUser(index+3) //asignado
   });
-  
+
+
+
   //materias
   materias.map( async (ele) => {
     const mat = await Course.create(ele);
     await mat.addTeachers(1)
     await mat.addStudents(1)
     await mat.addStudents(2)
+
+    const test = await Course.findOne({where: {id:1}}); //asignando horario
+    test.update({init: "10:00", end: "13:00"})   
   });
 
   //Tareas
@@ -133,5 +138,11 @@ conn.sync({force: true})
     })
     await user.setRol(4)
   }());
+
+  (async function (){
+    const abs = await Absences.create({absences: 5})
+    await abs.setStudent(1); //asignando estas inasistencias al alumno 1
+    await abs.setCourse(3); //asignando estas inasistencias a quimica
+  }())
 
 })
