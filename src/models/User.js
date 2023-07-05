@@ -2,14 +2,6 @@ const { DataTypes } = require('sequelize');
 
 module.exports = sequelize => {
   sequelize.define('User', {
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
       userName: {
         type: DataTypes.STRING,
         allowNull: false,

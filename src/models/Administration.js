@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = sequelize => {
-  sequelize.define('Representative', {
+  sequelize.define('Administration', {
     name: {
       type: DataTypes.STRING,
       allowNull: false
@@ -12,11 +12,11 @@ module.exports = sequelize => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     }
   },
   {
-    timestamps: true,
-    freezeTableName: true
+    freezeTableName: true,
+    timestamps: true
   });
 }
