@@ -2,14 +2,10 @@
 const user = 
 [
   {
-    name: "Luis",
-    lastName: "Fetuchinni",
     userName: "luisx00x",
     password: "12345"
   },
   {
-    name: "Anita",
-    lastName: "Fibonacci",
     userName: "Pequeñuela",
     password: "Hakunamatata"
   }
@@ -27,11 +23,16 @@ const rols = [
   },
   {
     name: "Apoderado"
+  },
+  {
+    name: "SuperAdmin"
   }
 ]
 
 const apoderados = [
   {
+    name: "Asdaldo",
+    lastName: "Petrucio",
     email: "asda@gmail.com"
   }
 ]
@@ -50,19 +51,27 @@ const materias = [
 
 const profesores = [
   {
+    name: "Julio",
+    lastName: "Manzanillo",
     email: "julio@mail.com"
   },
   {
+    name: "Antonio",
+    lastName: "Antonini",
     email: "antonio@mail.com"
   }
 ]
 
 const estudiantes = [
   {
+    name: "Anita",
+    lastName: "Fibonacci",
     fatherName: "Luis",
     motherName: "Ana",
   },
   {
+    name: "Pedrito",
+    lastName: "Fetuchinni",
     fatherName: "Pedro",
     motherName: "Maria",
   }

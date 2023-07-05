@@ -1,7 +1,7 @@
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 //MOCK
-const { User, Rols, Student, Representative, Teacher, Course, Year, Grade, Section, Homework, Calification, Absences } = require('./src/db.js');
+const { User, Rols, Student, Representative, Administration, Teacher, Course, Year, Grade, Section, Homework, Calification, Absences } = require('./src/db.js');
 const { user, rols, estudiantes, apoderados, profesores, materias} = require('./src/Mock.js');
 //*
 
@@ -143,6 +143,17 @@ conn.sync({force: true})
     const abs = await Absences.create({absences: 5})
     await abs.setStudent(1); //asignando estas inasistencias al alumno 1
     await abs.setCourse(3); //asignando estas inasistencias a quimica
-  }())
+  }());
+
+  //Administrativos
+
+  ( async function () {
+
+    const user = await User.create({userName: "Rubelino123", password: "password"});
+    user.setRol(1);
+    
+    const admin = await Administration.create({name: "Ruben", lastName: "Russio", email: "erusion@mail.com"})
+    await admin.setUser(6);
+  }());
 
 })

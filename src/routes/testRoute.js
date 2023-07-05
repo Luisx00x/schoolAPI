@@ -1,17 +1,11 @@
 
-const { User, Rols, Student, Representative, Teacher, Course, Year, Grade, Section, Homework, Calification, Schedules, Absences } = require('../db.js');
+const { User, Rols, Student, Representative, Teacher, Course, Year, Grade, Section, Homework, Calification, Schedules, Absences, Administration } = require('../db.js');
 
 async function test(req, res, next) {
 
   try{
 
-    const response = await Student.findAll({
-      include: [
-        {
-          model: Absences
-        }
-      ]
-    })
+    const response = await Administration.findAll()
 
     /* const response = await Calification.findAll({
       include: [

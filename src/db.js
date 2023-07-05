@@ -47,6 +47,7 @@ const {
   Student,
   Representative,
   Teacher,
+  Administration,
   Course,
   Year,
   Grade,
@@ -60,6 +61,10 @@ const {
 //Rols-Usuarios Catalogo
 Rols.hasOne(User);
 User.belongsTo(Rols);
+
+//un usuario por cada admin
+User.hasOne(Administration);
+Administration.belongsTo(User);
 
 //Un usuario por cada Estudiante
 User.hasOne(Student);
