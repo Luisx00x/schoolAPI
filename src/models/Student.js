@@ -12,11 +12,11 @@ module.exports = sequelize => {
     },
     fatherName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     motherName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     defaulter: {
       type: DataTypes.BOOLEAN,
