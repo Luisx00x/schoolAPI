@@ -5,4 +5,6 @@ const router = Router();
 
 router.get('/test', test);
 
+router.use('/', require('./auth.js'));
+
 module.exports = router;

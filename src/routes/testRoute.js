@@ -5,7 +5,21 @@ async function test(req, res, next) {
 
   try{
 
-    const response = await Administration.findAll()
+    const response = await Student.findAll({
+      include: [
+        {
+          model: User
+        },
+        {
+          model: Representative,
+          include: [
+            {
+              model: User
+            }
+          ]
+        }
+      ]
+    })
 
     /* const response = await Calification.findAll({
       include: [
