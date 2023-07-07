@@ -2,6 +2,7 @@
 const { User, Rol, Student, Teacher, Administration, Representative  } = require('../db.js');
 const { representativeRegister } = require('../helpers/representativeHandler.js');
 const { setUserName, setPassword } = require('../helpers/setUsersHandler.js');
+const { createObject, createUser } = require('../helpers/createUserHandler.js');
 
 const registerController = async (req, res, next) => {
 
@@ -53,24 +54,13 @@ const registerController = async (req, res, next) => {
         
         }
 
-        const newStudent = await Student.create({
-          name,
-          lastName,
-          fatherName,
-          motherName,
-        });
+        const newStudent = await createObject(Student, {name, lastName, fatherName, motherName});
 
-        const userName = setUserName(name,lastName, newStudent.id);
-        const password = await setPassword();
-        
-        const newUser = await User.create({
-          userName,
-          password
-        });
+        const newUser = await createUser(name, lastName, newStudent.id);
 
         await newUser.setRol(2);
         
-        await newStudent.setUser(newUser.id)
+        await newStudent.setUser(newUser.id);
 
         if(!searchParent){
 
@@ -83,6 +73,25 @@ const registerController = async (req, res, next) => {
         return res.status(200).json("El usuario del alumno y su apoderado se han creado exitosamente");
 
       }
+      /* else
+      if(userRol === "teacher"){
+
+        const searchTeacher = await Teacher.findOne({
+          where: {
+            email: email
+          }
+        })
+
+        if(searchTeacher){
+          return res.status(200).json({msg: "El profesor ya existe en el sistema", searchTeacher});
+        }
+        
+        else{
+
+          
+        }
+
+      } */
 
     }catch(err){
       //Falta manejar
