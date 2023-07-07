@@ -1,8 +1,20 @@
 const { encrypt } = require('./bcryptHandler.js');
 
 const setUserName = (name, lastName, id) => {
+
+  let nick;
+  let last;
+
+  (name.length < 4) ? 
+  nick = name : 
+  nick = name.slice(0,4);
   
-  const userName = name+lastName+id
+  (lastName < 4) ?
+  last = lastName:
+  last = lastName.slice(0,4);
+
+  const userName = nick+last+id;
+  
   return userName
 
 }

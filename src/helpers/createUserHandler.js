@@ -3,17 +3,7 @@ const { User } = require('../db.js');
 
 const createObject = async (Model, attributes) => {
 
-  const {name, lastName, motherName, motherLastName, fatherName, fatherLastName, email } = attributes;
-
-    const newModel = await Model.create({
-      name,
-      lastName,
-      motherName,
-      motherLastName,
-      fatherName,
-      fatherLastName,
-      email
-    })
+    const newModel = await Model.create(attributes)
 
     return newModel;
 
