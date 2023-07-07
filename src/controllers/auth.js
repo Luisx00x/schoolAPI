@@ -1,7 +1,6 @@
 
 const { User, Rol, Student, Teacher, Administration, Representative  } = require('../db.js');
 const { representativeRegister } = require('../helpers/representativeHandler.js');
-const { setUserName, setPassword } = require('../helpers/setUsersHandler.js');
 const { createObject, createUser } = require('../helpers/createUserHandler.js');
 
 const registerController = async (req, res, next) => {
@@ -24,10 +23,11 @@ const registerController = async (req, res, next) => {
       if(!lastName) throw Error("Debe ingresar un apellido");
       if(!email) throw Error("Se debe especificar un email");
       if(!userRol) throw Error("Se debe especificar el tipo de usuario");
-      if(!representative) throw Error("Se debe seleccionar un apoderado");
+      
+      if(userRol === 2){
 
-      if(userRol === "student"){
-
+        if(!representative) throw Error("Se debe seleccionar un apoderado");
+        
         const searchParent = await Representative.findOne({
           where: {
             email: email
@@ -72,9 +72,9 @@ const registerController = async (req, res, next) => {
 
         return res.status(200).json("El usuario del alumno y su apoderado se han creado exitosamente");
 
-      }
-      /* else
-      if(userRol === "teacher"){
+      }else
+
+      if(userRol === 3){
 
         const searchTeacher = await Teacher.findOne({
           where: {
@@ -88,10 +88,18 @@ const registerController = async (req, res, next) => {
         
         else{
 
-          
+          const newTeacher = await createObject(Teacher, {name, lastName, email});
+
+          const newUser = await createUser(name, lastName, newTeacher.id);
+
+          await newUser.setRol(3);
+          await newTeacher.setUser(newUser.id);
+
+          return res.status(200).json("El usuario del profesor se ha creado correctamente!");
+
         }
 
-      } */
+      }
 
     }catch(err){
       //Falta manejar
