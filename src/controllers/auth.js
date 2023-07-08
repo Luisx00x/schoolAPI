@@ -1,7 +1,8 @@
 
-const { User, Rol, Student, Teacher, Administration, Representative  } = require('../db.js');
+const { User, Student, Teacher, Administration, Representative  } = require('../db.js');
 const { representativeRegister } = require('../helpers/representativeHandler.js');
 const { createObject, createUser } = require('../helpers/createUserHandler.js');
+const { compare } = require('../helpers/bcryptHandler.js');
 
 const registerController = async (req, res, next) => {
 
@@ -58,8 +59,7 @@ const registerController = async (req, res, next) => {
 
         const newUser = await createUser(name, lastName, newStudent.id);
 
-        await newUser.setRol(2);
-        
+        await newUser.setRol(userRol);  
         await newStudent.setUser(newUser.id);
 
         if(!searchParent){
@@ -92,10 +92,35 @@ const registerController = async (req, res, next) => {
 
           const newUser = await createUser(name, lastName, newTeacher.id);
 
-          await newUser.setRol(3);
+          await newUser.setRol(userRol);
           await newTeacher.setUser(newUser.id);
 
           return res.status(200).json("El usuario del profesor se ha creado correctamente!");
+
+        }
+
+      }else
+      
+      if(userRol === 1){
+
+        const searchAdmin = await Administration.findOne({
+          where: {
+            email: email
+          }
+        });
+
+        if(searchAdmin) return res.status(202).json({msg: "El administrador ya se encuentra registrado", searchAdmin});
+
+        else {
+
+          const newAdmin = await createObject(Administration, {name, lastName, email});
+
+          const newUser = await createUser(name, lastName, newAdmin.id);
+
+          await newUser.setRol(userRol);
+          await newAdmin.setUser(newUser.id);
+
+          return res.status(200).json("El aministrador fue registrado exitosamente!");
 
         }
 
@@ -109,6 +134,39 @@ const registerController = async (req, res, next) => {
 
 }
 
+const loginController = async (req, res, next) => {
+
+  const { userName, password } = req.body;
+
+  if(!userName) return res.status(404).json("No ha ingresado un usuario");
+  if(!password) return res.status(404).json("No ha ingresado una contraseña");
+
+  try{
+
+    const searchUser = await User.findOne({
+      where: {
+        userName: userName
+      }
+    })
+
+    if(searchUser){
+
+      const verify = await compare(password, searchUser.password);
+  
+      if(verify) return res.status(200).json(searchUser)
+      else return res.status(404).json("Contraseña incorrecta");
+    }
+
+    return res.status(404).json("usuario no encontrado")
+
+  }catch(err){
+    console.error(err);
+    next();
+  }
+
+}
+
 module.exports = {
-  registerController
+  registerController,
+  loginController
 }
