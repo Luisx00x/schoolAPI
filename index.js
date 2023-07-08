@@ -3,6 +3,7 @@ const { conn } = require('./src/db.js');
 //MOCK
 const { User, Rols, Student, Representative, Administration, Teacher, Course, Year, Grade, Section, Homework, Calification, Absences } = require('./src/db.js');
 const { user, rols, estudiantes, apoderados, profesores, materias} = require('./src/Mock.js');
+const { newPassword } = require('./src/helpers/setUsersHandler.js');
 //*
 
 const PORT = process.env.PORT || 3001;
@@ -149,7 +150,9 @@ conn.sync({force: true})
 
   ( async function () {
 
-    const user = await User.create({userName: "Rubelino123", password: "password"});
+    const encryptedPassword = await newPassword("password");
+
+    const user = await User.create({userName: "Rubelino123", password: encryptedPassword});
     user.setRol(1);
     
     const admin = await Administration.create({name: "Ruben", lastName: "Russio", email: "erusion@mail.com"})
