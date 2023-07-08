@@ -19,6 +19,7 @@ const setUserName = (name, lastName, id) => {
 
 }
 
+//Cambiar nombres
 const setPassword = () => {
 
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@*"; //26 + 26 + 2
@@ -35,7 +36,15 @@ const setPassword = () => {
 
 }
 
+const newPassword = (planePassword) => {
+
+  const encryptedPassword = encrypt(planePassword);
+  return encryptedPassword;
+
+}
+
 module.exports = {
   setPassword,
-  setUserName
+  setUserName,
+  newPassword
 }
