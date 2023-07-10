@@ -127,7 +127,7 @@ const registerController = async (req, res, next) => {
       }
 
     }catch(err){
-      //Falta manejar
+      res.status(404).json(err.message)
       console.log(err);
       next();
     }
@@ -138,10 +138,10 @@ const loginController = async (req, res, next) => {
 
   const { userName, password } = req.body;
 
-  if(!userName) return res.status(404).json("No ha ingresado un usuario");
-  if(!password) return res.status(404).json("No ha ingresado una contraseña");
-
   try{
+
+    if(!userName) return res.status(404).json("No ha ingresado un usuario");
+    if(!password) return res.status(404).json("No ha ingresado una contraseña");
 
     const searchUser = await User.findOne({
       where: {
@@ -153,14 +153,22 @@ const loginController = async (req, res, next) => {
 
       const verify = await compare(password, searchUser.password);
   
-      if(verify) return res.status(200).json(searchUser)
+      if(verify){
+        const response = {
+          id: searchUser.id,
+          userName: searchUser.userName,
+          RolId: searchUser.RolId
+        }
+        return res.status(200).json(response);
+      }
       else return res.status(404).json("Contraseña incorrecta");
     }
 
     return res.status(404).json("usuario no encontrado")
 
   }catch(err){
-    console.error(err);
+    res.status(404).json(err)
+    console.log(err)
     next();
   }
 
