@@ -63,8 +63,8 @@ conn.sync({force: true})
     await mat.addStudents(1)
     await mat.addStudents(2)
 
-    const test = await Course.findOne({where: {id:1}}); //asignando horario
-    test.update({init: "10:00", end: "13:00"})   
+    /* const test = await Course.findOne({where: {id:1}}); //asignando horario
+    test.update({init: "10:00", end: "13:00"})   */ 
   });
 
   //Tareas

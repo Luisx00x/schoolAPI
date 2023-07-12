@@ -39,13 +39,19 @@ const apoderados = [
 
 const materias = [
   {
-    courseName: "matematica"
+    courseName: "matematica",
+    init: "10:00",
+    end: "12:00"
   },
   {
-    courseName: "fisica"
+    courseName: "fisica",
+    init: "08:00",
+    end: "10:00"
   },
   {
-    courseName: "quimica"
+    courseName: "quimica",
+    init: "07:00",
+    end: "08:00"
   }
 ]
 
