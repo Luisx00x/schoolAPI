@@ -8,11 +8,11 @@ module.exports = sequelize => {
     },
     init: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false
     },
     end: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false
     }
   },
   {
