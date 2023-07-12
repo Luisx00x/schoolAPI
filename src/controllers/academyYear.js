@@ -13,6 +13,22 @@ const newYearController = async (req, res, next) => {
       }
     })
 
+   /*  const test = await Year.findOne({
+      where: {
+        year: newYear
+      },
+      include: [
+        {
+          model: Grade,
+          include: [
+            {
+              model: Section
+            }
+          ]
+        }
+      ]
+    }) */
+
     if(searchYear) return res.status(200).json("El año que intenta crear ya existe");
 
     const createYear = await Year.create(
@@ -22,13 +38,13 @@ const newYearController = async (req, res, next) => {
     )
 
     //Eduación inicial
-    if(initial.length > 0) await gradeAssignment(createYear.id, initial);
+    if(initial?.length > 0) await gradeAssignment(createYear.id, initial);
 
     //Primaria
-    if(elementary.length > 0) await gradeAssignment(createYear.id, elementary);
+    if(elementary?.length > 0) await gradeAssignment(createYear.id, elementary);
 
     //Segundaria
-    if(high.length > 0) await gradeAssignment(createYear.id, high);
+    if(high?.length > 0) await gradeAssignment(createYear.id, high);
 
     return res.status(200).json("El nuevo año escolar fue creado exitosamente!");
 
