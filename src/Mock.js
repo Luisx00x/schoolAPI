@@ -49,6 +49,11 @@ const materias = [
     end: "10:00"
   },
   {
+    courseName: "fisica",
+    init: "14:00",
+    end: "16:00"
+  },
+  {
     courseName: "quimica",
     init: "07:00",
     end: "08:00"

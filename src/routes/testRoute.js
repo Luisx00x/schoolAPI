@@ -5,10 +5,15 @@ async function test(req, res, next) {
 
   try{
 
-    const response = await Administration.findAll({
+    const response = await Course.findAll({
       include: [
         {
-          model: User
+          model: Section,
+          include: [
+            {
+              model: Student
+            }
+          ]
         }
       ]
     });

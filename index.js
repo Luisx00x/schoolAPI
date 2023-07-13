@@ -40,11 +40,22 @@ conn.sync({force: true})
     const sec = await Section.create({sectionName: "A"})
     const sec2 = await Section.create({sectionName: "B"})
     const sec3 = await Section.create({sectionName: "C"})
+
+    //* Evaluando si un la relacion curso-grado es uno a muchos o no.
     await sec.setGrade(1);
     await sec.setCourse(2);
 
     await sec2.setGrade(1);
+
     await sec3.setGrade(2);
+    await sec3.setCourse(3);
+    await sec3.addStudents(1);
+    await sec3.addStudents(2);
+
+    //Asignar alumnos a secciones
+    await sec.addStudents(1);
+    await sec.addStudents(2);
+    
   }());
 
 
@@ -158,5 +169,6 @@ conn.sync({force: true})
     const admin = await Administration.create({name: "Ruben", lastName: "Russio", email: "erusion@mail.com"})
     await admin.setUser(6);
   }());
+
 
 })
