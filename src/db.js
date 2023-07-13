@@ -70,6 +70,10 @@ Administration.belongsTo(User);
 User.hasOne(Student);
 Student.belongsTo(User);
 
+//Un estudiante puede pertenecer a muchas secciones - Una seccion tiene muchos estidiantes
+Section.belongsToMany(Student, {through: "Student_Section"});
+Student.belongsToMany(Section, {through: "Student_Section"});
+
 //Un usuario por cada apoderado
 User.hasOne(Representative);
 Representative.belongsTo(User);
