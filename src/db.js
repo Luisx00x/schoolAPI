@@ -90,7 +90,7 @@ Teacher.belongsTo(User);
 Teacher.belongsToMany(Course, {through: "Teacher_Course" });
 Course.belongsToMany(Teacher, {through: "Teacher_Course"});
 
-//Un Curso tiene muchos alumnos - Un alumno tiene muchos cursos
+//Un Curso tiene muchos alumnos - Un alumno tiene muchos cursos //???
 Student.belongsToMany(Course, {through: "Student_Course"});
 Course.belongsToMany(Student, {through: "Student_Course"});
 
@@ -104,7 +104,9 @@ Section.belongsTo(Grade);
 
 //? Revisar
 //Un curso tiene varias secciones - una seccion pertenece a un curso
-Course.hasMany(Section);
+/* Course.hasMany(Section);
+Section.belongsTo(Course); */
+Course.hasOne(Section);
 Section.belongsTo(Course);
 
 //Una tarea pertenece a un profesor - un profesor pertenece a una tarea
