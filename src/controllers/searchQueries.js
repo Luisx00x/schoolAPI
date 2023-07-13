@@ -1,4 +1,4 @@
-const { Student, Teacher, Administration, Course, User, Representative } = require('../db.js');
+const { Student, Teacher, Administration, Course, User, Representative, Grade, Section, Year } = require('../db.js');
 
 const searchUser = async (req, res, next) => {
 
@@ -66,7 +66,44 @@ const searchUser = async (req, res, next) => {
 
 }
 
+const searchGrades = async (req, res, next) => {
+
+  try{
+
+    const { year } = req.query;
+
+    if(!year) throw Error("Falta el año de búsqueda");
+
+    const searchYear = await Year.findOne({
+      where: {
+        year
+      }
+    })
+
+    if(!searchYear) throw Error("No hay registros de ese año");
+
+    const searchingGrade = await Grade.findAll({
+      where: {
+        YearId: searchYear.id
+      },
+      include: [
+        {
+          model: Section
+        }
+      ]
+    })
+
+    return res.status(200).json(searchingGrade);
+
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+
+}
+
 
 module.exports = {
-  searchUser
+  searchUser,
+  searchGrades
 }
