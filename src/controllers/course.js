@@ -2,7 +2,7 @@ const { Course, Section, Teacher, Grade, Student } = require('../db.js');
 
 const createCourse = async (req, res, next) => {
 
-  const { courseName, init, end, teacherId, sectionId, sectionName} = req.body;
+  const { courseName, init, end, gradeId, teacherId, sectionId} = req.body;
 
   try{
 
@@ -12,28 +12,29 @@ const createCourse = async (req, res, next) => {
     if(!teacherId) return res.status(400).json("No se ha especificado un profesor");
     if(!sectionId) return res.status(400).json("No se ha especificado una sección");
 
-    const searchCourse = await Course.findOne({
+    const searchCourse = await Course.findAll({
       where: {
         courseName
       },
       include: [
         {
-          model: Section
+          model: Section,
+          include: [
+            {
+              model: Grade
+            }
+          ]
         }
       ]
     });
-  
-    //Revisar si sectionName es necesario obligatoriamente
-    const searchSection = await Section.findOne({
-      where:{
-        id: sectionId,
-        sectionName
-      }
+
+    //* REQUIERE UNA SECCIÓN PARA COMPARAR CON EL NOMBRE DEL GRADO QUE RECIBE
+    const valiadteCourse = searchCourse.find( ele => {
+      if(ele.Section) return ele.Section.GradeId === gradeId
     })
 
-    //if(searchCourse && searchSection) return res.status(200).json({msg: "El curso ingresado ya existe", searchSection});
+    if(valiadteCourse) return res.status(200).json({msg: "El Curso ya existe", valiadteCourse});
 
-    //Creacion de curso
     const createCourse = await Course.create({
       courseName,
       init,
@@ -43,32 +44,15 @@ const createCourse = async (req, res, next) => {
     // Se busca al profesor ingresado
     const validateTeacher = await Teacher.findByPk(teacherId)
     //Se agrega el profesor
-    createCourse.addTeachers(validateTeacher);
+    await createCourse.addTeachers(validateTeacher.id);
 
-    //if(validateTeacher.id !== teacherId) return res.status(400).json("Id de profesor no válido");
+    //Se agrega el curso a una sección
 
-    //TODO PARA PODER CONTINUAR NECESITO PRIMERO AGREGAR ALUMNOS A LAS SECCIONES
+    const searchSection = await Section.findByPk(sectionId);
+    //Se le agrega la seccion /=> Los alumnos estan en la seccion
+    await searchSection.setCourse(createCourse.id);
 
-    const test = await Course.findByPk(createCourse.id,{
-      include: [
-        {
-          model: Section,
-          include: [
-            {
-              model: Grade
-            }
-          ]
-        },
-        {
-          model: Teacher
-        }
-      ]
-    });
-
-      return res.status(200).json(validateGrade);
-
-    
-    next();
+    return res.status(200).json({msg: "Se ha agregado la sección exitosamente!", createCourse});
 
   }catch(err){
     console.error(err);
