@@ -27,9 +27,9 @@ conn.sync({force: true})
   //Grados
 
   (async function(){
-    const grad = await Grade.create({grade: "1 primaria"})
-    const grad2 = await Grade.create({grade: "3 secundaria"})
-    const grad3 = await Grade.create({grade: "2 inicial"})
+    const grad = await Grade.create({grade: "primaria"})
+    const grad2 = await Grade.create({grade: "secundaria"})
+    const grad3 = await Grade.create({grade: "inicial"})
     await grad.setYear(1)
     await grad2.setYear(1)
     await grad3.setYear(2)
