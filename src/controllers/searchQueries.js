@@ -102,8 +102,28 @@ const searchGrades = async (req, res, next) => {
 
 }
 
+const searchTeachers = async (req, res, next) => {
+
+  try{
+
+    const allTeachers = await Teacher.findAll({
+      include: [{model: Course}]
+    })
+
+    if(allTeachers) return res.status(200).json(allTeachers);
+
+    next();
+
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+
+}
+
 
 module.exports = {
   searchUser,
-  searchGrades
+  searchGrades,
+  searchTeachers
 }
