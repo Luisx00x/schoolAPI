@@ -48,6 +48,7 @@ const {
   Representative,
   Teacher,
   Administration,
+  Schedules,
   Course,
   Year,
   Grade,
@@ -108,6 +109,10 @@ Section.belongsTo(Grade);
 Section.belongsTo(Course); */
 Course.hasOne(Section);
 Section.belongsTo(Course);
+
+//Un curso/materia tiene muchos horarios - un horario le pertence a un curso
+Course.hasMany(Schedules);
+Schedules.belongsTo(Course);
 
 //Una tarea pertenece a un profesor - un profesor pertenece a una tarea
 Teacher.hasOne(Homework);
