@@ -58,7 +58,7 @@ const createCourse = async (req, res, next) => {
     const searchSection = await Section.findByPk(sectionId);
 
     //Se le agrega la seccion /=> Los alumnos estan en la seccion
-    await searchSection.setCourse(createCourse.id);
+    await searchSection.addCourses(createCourse.id);
 
     days.map(async day => {
       
