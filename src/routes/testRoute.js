@@ -5,7 +5,7 @@ async function test(req, res, next) {
 
   try{
 
-    const response = await Grade.findAll({
+    const response = await Course.findAll({
       include: [
         {
           model: Section,
@@ -14,6 +14,9 @@ async function test(req, res, next) {
               model: Student
             }
           ]
+        },
+        {
+          model: Teacher
         }
       ]
     });

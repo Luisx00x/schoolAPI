@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Student, Teacher, Administration, Course, User, Representative, Grade, Section, Year } = require('../db.js');
 
 const searchUser = async (req, res, next) => {
@@ -121,9 +122,54 @@ const searchTeachers = async (req, res, next) => {
 
 }
 
+const studentsWithoutSection = async (req, res, next) => {
+
+  const thisYear = new Date();
+
+  try{
+
+    //Año en curso => Busca los grados registrados
+    const years = await Year.findOne({
+      where: {
+        year: thisYear.getFullYear()
+      },
+      include: [
+        { model: Grade }
+      ]
+    })
+
+    //Tengo los grados de este año vigente
+    const grades = years.Grades.map( year => year.id);
+
+    //Encuentro los grados correspondientes a los ids conseguidos
+    const search = await Grade.findAll({
+      where: {
+        id: {
+          [Op.or]: grades
+        }
+      },
+      include: [
+        { model: Section,
+          include: [ { model: Course}]
+        }
+      ]
+    });
+
+    console.log(grades)
+
+  return res.status(200).json(search);
+
+  }catch(err){
+    console.log(err);
+    next(err)
+}
+
+}
+
 
 module.exports = {
   searchUser,
   searchGrades,
-  searchTeachers
+  searchTeachers,
+  studentsWithoutSection
 }

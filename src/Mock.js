@@ -85,6 +85,12 @@ const estudiantes = [
     lastName: "Fetuchinni",
     fatherName: "Pedro",
     motherName: "Maria",
+  },
+  {
+    name: "Mauricio",
+    lastName: "Test",
+    fatherName: "Porfirio",
+    motherName: "Antonella"
   }
 ]
 

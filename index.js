@@ -20,6 +20,7 @@ conn.sync({force: true})
 
   //año_escolar
   (async function(){
+    await Year.create({year: 2022})
     const annio = await Year.create({year: 2023})
     await Year.create({year: 2024});
   }());
@@ -31,7 +32,7 @@ conn.sync({force: true})
     const grad2 = await Grade.create({grade: "secundaria"})
     const grad3 = await Grade.create({grade: "inicial"})
     await grad.setYear(1)
-    await grad2.setYear(1)
+    await grad2.setYear(2)
     await grad3.setYear(2)
   }());
 

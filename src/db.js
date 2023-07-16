@@ -107,6 +107,7 @@ Section.belongsTo(Grade);
 
 //? Revisar
 //Un curso tiene varias secciones - una seccion pertenece a un curso
+//TODO CAMBIAR => UNA SECCION TIENE QUE TENER MUCHOS CURSOS - UN CURSO PERTENECE A UNA SECCION
 /* Course.hasMany(Section);
 Section.belongsTo(Course); */
 Course.hasOne(Section);

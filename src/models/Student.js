@@ -14,7 +14,15 @@ module.exports = sequelize => {
       type: DataTypes.STRING,
       allowNull: true
     },
+    fatherLastName: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     motherName: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    motherLastName: {
       type: DataTypes.STRING,
       allowNull: true
     },
