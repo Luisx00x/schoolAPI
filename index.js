@@ -70,7 +70,7 @@ conn.sync({force: true})
   //materias
   materias.map( async (ele) => {
     const mat = await Course.create(ele);
-    await mat.addTeachers(1)
+    await mat.setTeacher(1)
     await mat.addStudents(1)
     await mat.addStudents(2)
 

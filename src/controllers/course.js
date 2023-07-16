@@ -51,7 +51,7 @@ const createCourse = async (req, res, next) => {
     // Se busca al profesor ingresado
     const validateTeacher = await Teacher.findByPk(teacherId)
     //Se agrega el profesor
-    await createCourse.addTeachers(validateTeacher.id);
+    await createCourse.setTeacher(validateTeacher.id);
 
     //Se agrega el curso a una sección
 
