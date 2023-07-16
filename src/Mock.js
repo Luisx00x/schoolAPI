@@ -78,7 +78,9 @@ const estudiantes = [
     name: "Anita",
     lastName: "Fibonacci",
     fatherName: "Luis",
+    fatherLastName: "Antonini",
     motherName: "Ana",
+    motherLastName: "Quintano"
   },
   {
     name: "Pedrito",
@@ -90,7 +92,8 @@ const estudiantes = [
     name: "Mauricio",
     lastName: "Test",
     fatherName: "Porfirio",
-    motherName: "Antonella"
+    motherName: "Antonella",
+    isActive: false
   }
 ]
 

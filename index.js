@@ -44,12 +44,14 @@ conn.sync({force: true})
 
     //* Evaluando si un la relacion curso-grado es uno a muchos o no.
     await sec.setGrade(1);
-    await sec.setCourse(2);
+    //VIGENTE
+    //await sec.setCourse(2);
+    await sec.addCourses(2);
 
     await sec2.setGrade(1);
 
     await sec3.setGrade(2);
-    await sec3.setCourse(3);
+    await sec3.addCourses(3);
     await sec3.addStudents(1);
     await sec3.addStudents(2);
 
