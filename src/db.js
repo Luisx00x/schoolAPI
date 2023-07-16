@@ -110,8 +110,12 @@ Section.belongsTo(Grade);
 //TODO CAMBIAR => UNA SECCION TIENE QUE TENER MUCHOS CURSOS - UN CURSO PERTENECE A UNA SECCION
 /* Course.hasMany(Section);
 Section.belongsTo(Course); */
-Course.hasOne(Section);
-Section.belongsTo(Course);
+//VIGENTE
+/* Course.hasOne(Section);
+Section.belongsTo(Course); */
+
+Section.hasMany(Course);
+Course.belongsTo(Section);
 
 //Un curso/materia tiene muchos horarios - un horario le pertence a un curso
 Course.hasMany(Schedules);
