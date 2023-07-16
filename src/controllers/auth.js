@@ -55,7 +55,15 @@ const registerController = async (req, res, next) => {
         
         }
 
-        const newStudent = await createObject(Student, {name, lastName, fatherName, motherName});
+        const newStudent = await createObject(Student, 
+          {
+            name, 
+            lastName, 
+            fatherName,
+            fatherLastName,
+            motherName,
+            motherLastName
+          });
 
         const newUser = await createUser(name, lastName, newStudent.id);
 
