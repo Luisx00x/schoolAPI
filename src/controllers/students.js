@@ -1,4 +1,4 @@
-const { Grade, Section, Student } = require('../db.js');
+const { Grade, Section, Student, Year } = require('../db.js');
 
 const assignStudents = async (req, res, next) => {
 
@@ -28,11 +28,27 @@ const assignStudents = async (req, res, next) => {
     if(!sectionSelected) return res.status(400).json("No existe la sección especificad");
 
     //Comprobación
-    const studentInSection = sectionSelected.Students;
-    if(studentInSection.find( student => student.id === studentId)) {
-      return res.status(200).json(sectionSelected);
-    }
+    const studentGrade = await Student.findByPk(studentId,{
+      include: [ 
+        {
+          model: Section, 
+          include: [
+            {model: Grade,
+            include: [
+              {model: Year}
+            ]}
+          ]
+        }
+      ]
+    });
 
+    const thisYear = new Date().getFullYear();
+
+    studentGrade.Sections.map( ele => console.log(ele.Grade.Year.year))
+
+    if(studentGrade.Sections.find( section => section.Grade.Year.year <= thisYear)) {
+      return res.status(200).json("El alumno ya se encuentra en una sección este año escolar");
+    }
     const findStudent = await Student.findByPk(studentId);
 
     if(!findStudent) return res.status(400).json("No se ha encontrado a ese estudiante");
