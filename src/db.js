@@ -88,10 +88,12 @@ User.hasOne(Teacher);
 Teacher.belongsTo(User);
 
 //Un profesor da clases en muchos cursos - Un curso puede tener muchos profesores
-Teacher.belongsToMany(Course, {through: "Teacher_Course" });
-Course.belongsToMany(Teacher, {through: "Teacher_Course"});
+/* Teacher.belongsToMany(Course, {through: "Teacher_Course" });
+Course.belongsToMany(Teacher, {through: "Teacher_Course"}); */
+Teacher.hasMany(Course);
+Course.belongsTo(Teacher)
 
-//Un Curso tiene muchos alumnos - Un alumno tiene muchos cursos //???
+//Un Curso tiene muchos alumnos - Un alumno tiene muchos cursos //??? //!EVALUANDO, PROABLEMENTE NO
 Student.belongsToMany(Course, {through: "Student_Course"});
 Course.belongsToMany(Student, {through: "Student_Course"});
 
