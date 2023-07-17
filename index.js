@@ -8,14 +8,41 @@ const { newPassword } = require('./src/helpers/setUsersHandler.js');
 
 const PORT = process.env.PORT || 3001;
 
-conn.sync({force: true})
+conn.sync({force: false})
 .then( ()=> {
   server.listen(PORT, () => {
     console.log(`listening at port ${PORT}`)
   })
 })
 
+.then( () => {
+
+  ( async function () {
+    
+    rols.map( async ele => await Rols.create(ele))
+  
+  }())
+
+})
+
+/* .then( () => {
+  ( async function () {
+
+    const encryptedPassword = await newPassword("password");
+
+    const user = await User.create({userName: "Rubelino123", password: encryptedPassword});
+    user.setRol(1);
+    
+    const admin = await Administration.create({name: "Ruben", lastName: "Russio", email: "erusion@mail.com"})
+    await admin.setUser(1);
+  }())
+
+
+
+}) */
+
 //MOCK
+/* 
 .then( () => {
 
   //año_escolar
@@ -77,8 +104,8 @@ conn.sync({force: true})
     await mat.addStudents(1)
     await mat.addStudents(2)
 
-    /* const test = await Course.findOne({where: {id:1}}); //asignando horario
-    test.update({init: "10:00", end: "13:00"})   */ 
+    //const test = await Course.findOne({where: {id:1}}); //asignando horario
+    //test.update({init: "10:00", end: "13:00"})    
   });
 
   //Tareas
@@ -111,16 +138,19 @@ conn.sync({force: true})
   
   estudiantes.map( async (ele, index) => {
     const estudiante = await Student.create(ele)
-   /*  await estudiante.setRols(2) */
+   //  await estudiante.setRols(2) 
     await estudiante.setUser(index+1)
   })
 
+  //Roles
   rols.map( async ele => await Rols.create(ele))
+
   user.map( async ele => {
     const result = await User.create(ele)
     await result.setRol(2);
   })
 })
+
 .then( () => {
 //Usuario profesor
   (async function () {
@@ -162,16 +192,16 @@ conn.sync({force: true})
 
   //Administrativos
 
-  ( async function () {
+  //( async function () {
 
-    const encryptedPassword = await newPassword("password");
+  //  const encryptedPassword = await newPassword("password");
 
-    const user = await User.create({userName: "Rubelino123", password: encryptedPassword});
-    user.setRol(1);
+  //  const user = await User.create({userName: "Rubelino123", password: encryptedPassword});
+  //  user.setRol(1);
     
-    const admin = await Administration.create({name: "Ruben", lastName: "Russio", email: "erusion@mail.com"})
-    await admin.setUser(6);
-  }());
+  //  const admin = await Administration.create({name: "Ruben", lastName: "Russio", email: "erusion@mail.com"})
+  //  await admin.setUser(6);
+  //}());
 
 
-})
+}) */
