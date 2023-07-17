@@ -130,6 +130,9 @@ const searchActiveStudents = async (req, res, next) => {
     include: [
       {
         model: Representative
+      },
+      {
+        model: Section
       }
     ]
   })
