@@ -20,14 +20,14 @@ const registerController = async (req, res, next) => {
 
     try{
       
-      if(!name) throw Error("Debe ingresar un nombre");
-      if(!lastName) throw Error("Debe ingresar un apellido");
-      if(!email) throw Error("Se debe especificar un email");
-      if(!userRol) throw Error("Se debe especificar el tipo de usuario");
+      if(!name) return res.status(400).json("Debe ingresar un nombre");
+      if(!lastName) return res.status(400).json("Debe ingresar un apellido");
+      if(!email) return res.status(400).json("Se debe especificar un email");
+      if(!userRol) return res.status(400).json("Se debe especificar el tipo de usuario");
       
       if(userRol === 2){
 
-        if(!representative) throw Error("Se debe seleccionar un apoderado");
+        if(!representative) return res.status(400).json("Se debe seleccionar un apoderado");
         
         const searchParent = await Representative.findOne({
           where: {
@@ -50,7 +50,7 @@ const registerController = async (req, res, next) => {
             }
           })
 
-          if(searchChild) return res.json({msg: "El alumno ya se encuentra registrado", searchParent}); 
+          if(searchChild) return res.status(200).json("El alumno ya se encuentra registrado"); 
           //aqui es la interrupcion
         
         }
@@ -91,7 +91,7 @@ const registerController = async (req, res, next) => {
         })
 
         if(searchTeacher){
-          return res.status(200).json({msg: "El profesor ya existe en el sistema", searchTeacher});
+          return res.status(200).json("El profesor ya existe en el sistema");
         }
         
         else{
@@ -117,7 +117,7 @@ const registerController = async (req, res, next) => {
           }
         });
 
-        if(searchAdmin) return res.status(202).json({msg: "El administrador ya se encuentra registrado", searchAdmin});
+        if(searchAdmin) return res.status(202).json("El administrador ya se encuentra registrado");
 
         else {
 
@@ -135,7 +135,7 @@ const registerController = async (req, res, next) => {
       }
 
     }catch(err){
-      res.status(404).json(err.message)
+      res.status(404).json(err)
       console.log(err);
       next();
     }

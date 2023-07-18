@@ -55,7 +55,7 @@ const assignStudents = async (req, res, next) => {
 
     await sectionSelected.addStudents(findStudent.id);
 
-    return res.status(200).json(sectionSelected);
+    return res.status(200).json("Alumno asingado a la sección exitosamente!");
 
   }catch(err){
     console.error(err);
