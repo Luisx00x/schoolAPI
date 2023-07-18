@@ -6,12 +6,12 @@ const { user, rols, estudiantes, apoderados, profesores, materias} = require('./
 const { newPassword } = require('./src/helpers/setUsersHandler.js');
 //*
 
-const PORT = process.env.DB_DEPLOY_PORT || 3001;
+const port = process.env.PORT || 3001;
 
 conn.sync({force: false})
 .then( ()=> {
-  server.listen(PORT, "0.0.0.0", () => {
-    console.log(`%listening at port ${PORT}`)
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`%listening at port ${port}`)
   })
 })
 
