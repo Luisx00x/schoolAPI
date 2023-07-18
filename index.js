@@ -8,9 +8,10 @@ const { newPassword } = require('./src/helpers/setUsersHandler.js');
 
 const PORT = process.env.DB_DEPLOY_PORT || 3001;
 
+//"0.0.0.0" por poblema de host de railway
 conn.sync({force: false})
 .then( ()=> {
-  server.listen(PORT, () => {
+  server.listen(PORT, "0.0.0.0", () => {
     console.log(`listening at port ${PORT}`)
   })
 })
