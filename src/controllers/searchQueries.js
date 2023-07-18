@@ -67,6 +67,51 @@ const searchUser = async (req, res, next) => {
 
 }
 
+const findUserData = async (req, res, next) => {
+
+  try{
+
+    const {user, rol, applicant} = req.query;
+
+    if(!user) return res.status(400).json("Falta información: no hay usuario");
+    if(!applicant) return res.status(400).json("Falta información: No hay información del aplicante");
+    if(!rol) return res.status(400).json("Falta el rol buscado");
+
+    //PROFESORES
+    if(parseInt(rol) === 3 && (parseInt(applicant) === 1 || parseInt(applicant) === 3 || parseInt(applicant) === 5)){
+
+      const findUser = await User.findByPk(user,{
+        attributes: [],
+        include: [{
+          model: Teacher,
+          include: [
+            {
+              model: Course,
+              include: [
+                { 
+                  model: Section,
+                  include: [
+                    { model: Grade }
+                  ]
+                }
+              ]
+            }
+          ]
+        }]
+      });
+  
+      return res.status(200).json(findUser)
+    }
+
+    next()
+
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+
+}
+
 const searchGrades = async (req, res, next) => {
 
   try{
@@ -145,5 +190,6 @@ module.exports = {
   searchUser,
   searchGrades,
   searchTeachers,
-  searchActiveStudents
+  searchActiveStudents,
+  findUserData
 }
