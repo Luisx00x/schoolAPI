@@ -10,20 +10,20 @@ const PORT = process.env.DB_DEPLOY_PORT || 3001;
 
 conn.sync({force: false})
 .then( ()=> {
-  server.listen(PORT, () => {
-    console.log(`listening at port ${PORT}`)
+  server.listen(PORT, "0.0.0.0", () => {
+    console.log(`%listening at port ${PORT}`)
   })
 })
-/* 
+
 .then( () => {
 
   ( async function () {
     
-    rols.map( async ele => await Rols.create(ele))
+    /* rols.map( async ele => await Rols.create(ele)) */
   
   }())
 
-}) */
+})
 /* 
 .then( () => {
   ( async function () {
