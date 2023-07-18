@@ -10,7 +10,7 @@ const PORT = process.env.DB_DEPLOY_PORT || 3001;
 
 conn.sync({force: false})
 .then( ()=> {
-  server.listen(PORT, "0.0.0.0", () => {
+  server.listen(PORT, () => {
     console.log(`listening at port ${PORT}`)
   })
 })
