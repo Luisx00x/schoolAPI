@@ -6,7 +6,7 @@ const { user, rols, estudiantes, apoderados, profesores, materias} = require('./
 const { newPassword } = require('./src/helpers/setUsersHandler.js');
 //*
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.DB_DEPLOY_PORT || 3001;
 
 conn.sync({force: false})
 .then( ()=> {
@@ -19,13 +19,13 @@ conn.sync({force: false})
 
   ( async function () {
     
-    rols.map( async ele => await Rols.create(ele))
+   /*  rols.map( async ele => await Rols.create(ele)) */
   
   }())
 
 })
-
-/* .then( () => {
+/* 
+.then( () => {
   ( async function () {
 
     const encryptedPassword = await newPassword("password");
