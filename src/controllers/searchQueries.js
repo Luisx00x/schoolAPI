@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const { Student, Teacher, Administration, Course, User, Representative, Grade, Section, Year } = require('../db.js');
+const { searchCourse, findTeacherByPk } = require('../helpers/searchQueriesHandlers.js');
 
 const searchUser = async (req, res, next) => {
 
@@ -80,25 +81,7 @@ const findUserData = async (req, res, next) => {
     //PROFESORES
     if(parseInt(rol) === 3 && (parseInt(applicant) === 1 || parseInt(applicant) === 3 || parseInt(applicant) === 5)){
 
-      const findUser = await User.findByPk(user,{
-        attributes: [],
-        include: [{
-          model: Teacher,
-          include: [
-            {
-              model: Course,
-              include: [
-                { 
-                  model: Section,
-                  include: [
-                    { model: Grade }
-                  ]
-                }
-              ]
-            }
-          ]
-        }]
-      });
+      const findUser = await findTeacherByPk(user);
   
       return res.status(200).json(findUser)
     }
@@ -186,10 +169,34 @@ const searchActiveStudents = async (req, res, next) => {
 
 }
 
+const searchById = async (req, res, next) => {
+
+  const { searchId } = req.query;
+  
+  const userId = parseInt(req.query.rolId)
+
+  if(!searchId) return res.status(400).json("No hay elemento para buscar")
+  
+  if(userId === 1 || userId === 3){
+
+    const searchData = await searchCourse(searchId);
+
+    if(searchData) return res.status(200).json(searchData)
+    
+    next()
+
+  }
+  
+  return res.status(400).json("No tienes acceso a esta información");
+
+
+}
+
 module.exports = {
   searchUser,
   searchGrades,
   searchTeachers,
   searchActiveStudents,
-  findUserData
+  findUserData,
+  searchById
 }

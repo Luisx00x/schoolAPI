@@ -9,6 +9,7 @@ router.use('/', require('./auth.js'));
 router.use('/', require('./course.js'));
 router.use('/', require('./academyYear.js'));
 router.use('/', require('./students.js'));
+router.use('/teacher', require('./teacher.js'));
 router.use('/queries', require('./searchQueries.js'));
 
 module.exports = router;
