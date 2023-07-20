@@ -68,7 +68,7 @@ const createCourse = async (req, res, next) => {
 
     })
 
-    return res.status(200).json({msg: "Se ha agregado la sección exitosamente!", createCourse});
+    return res.status(200).json("Se ha agregado la sección exitosamente!");
 
   }catch(err){
     console.error(err);
