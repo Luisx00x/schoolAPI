@@ -1,4 +1,4 @@
-const { Year, Teacher } = require('../db.js');
+const { Year, Teacher, Absences, Course } = require('../db.js');
 const { findTeacherByPk } = require('../helpers/searchQueriesHandlers.js');
 
 const searchTeacherCourses = async (req, res, next) => {
@@ -49,6 +49,46 @@ const searchTeacherCourses = async (req, res, next) => {
 
 }
 
+const addAbsences = async (req, res, next) => {
+  
+  //NECESITO UN CURSO Y UN ALUMNO
+  try{
+
+    const { courseId, studentId, absences } = req.query;
+
+    if(!courseId) return res.status(400).json("Falta un curso");
+    if(!studentId) return res.status(400).json("Falta un alumno");
+    if(!absences) return res.status(400).json("No ha ingresado cuantas inasistencias tiene el alumno");
+
+    //UPDATE DE LA ABSENCES
+
+    const course = await Course.findByPk(courseId,{
+      include: [
+        { model: Absences }
+      ]
+    });
+
+    const student = course.Absences.find( absences => {
+      if(absences.StudentId == studentId) return absences
+    });
+
+    const studentAbsences = await Absences.findByPk(student.StudentId);
+    
+    //Actualizando
+    await studentAbsences.update({
+      absences: absences
+    })
+
+    return res.status(200).json("Inasistencias actualizadas!")
+    
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+
+}
+
 module.exports = {
-  searchTeacherCourses
+  searchTeacherCourses,
+  addAbsences
 }
