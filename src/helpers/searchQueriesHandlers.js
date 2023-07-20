@@ -1,4 +1,4 @@
-const { Student, Teacher, Representative, Administration, Course, Section, Schedules, User, Grade} = require('../db.js');
+const { Student, Teacher, Absences, Representative, Administration, Course, Section, Schedules, User, Grade} = require('../db.js');
 
 const searchCourse = async (searchId) => {
 
@@ -36,7 +36,11 @@ const findTeacherByPk = async (user) => {
                 { model: Grade },
                 { 
                   model: Student, 
-                  attributes: ["id","name","lastName"]}
+                  attributes: ["id","name","lastName"],
+                  include: [
+                    {model: Absences}
+                  ]
+                }
               ]
             }
           ]
