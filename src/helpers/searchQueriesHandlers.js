@@ -5,8 +5,13 @@ const searchCourse = async (searchId) => {
   const searchData = await Course.findByPk(searchId, {
     include: [
       {
-        model: Section,
         model: Schedules
+      },
+      {
+        model: Section,
+        include: [
+          { model: Student}
+        ]
       }
     ]
   });
@@ -28,7 +33,10 @@ const findTeacherByPk = async (user) => {
             { 
               model: Section,
               include: [
-                { model: Grade }
+                { model: Grade },
+                { 
+                  model: Student, 
+                  attributes: ["name","lastName"]}
               ]
             }
           ]
