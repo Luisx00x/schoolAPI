@@ -175,7 +175,8 @@ const searchById = async (req, res, next) => {
   
   const userId = parseInt(req.query.rolId)
 
-  if(!searchId) return res.status(400).json("No hay elemento para buscar")
+  if(!searchId) return res.status(400).json("No hay elemento para buscar");
+  if(!Number(searchId)) return res.status(400).json("El valor ingresado no el formato correcto");
   
   if(userId === 1 || userId === 3){
 
