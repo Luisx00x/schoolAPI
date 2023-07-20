@@ -1,4 +1,4 @@
-const { Grade, Section, Student, Year } = require('../db.js');
+const { Grade, Section, Student, Year, Course, Absences } = require('../db.js');
 
 const assignStudents = async (req, res, next) => {
 
@@ -21,7 +21,8 @@ const assignStudents = async (req, res, next) => {
 
     const sectionSelected = await Section.findByPk(sectionId, {
       include: [
-        {model: Student}
+        {model: Student},
+        {model: Course}
       ]
     });
 
@@ -44,7 +45,7 @@ const assignStudents = async (req, res, next) => {
 
     const thisYear = new Date().getFullYear();
 
-    studentGrade.Sections.map( ele => console.log(ele.Grade.Year.year))
+    //studentGrade.Sections.map( ele => console.log(ele.Grade.Year.year))
 
     if(studentGrade.Sections.find( section => section.Grade.Year.year <= thisYear)) {
       return res.status(200).json("El alumno ya se encuentra en una sección este año escolar");
@@ -53,9 +54,23 @@ const assignStudents = async (req, res, next) => {
 
     if(!findStudent) return res.status(400).json("No se ha encontrado a ese estudiante");
 
+    //Se relaciona el estudiante con todos los cursos de la sección
+    //sectionSelected.Courses
+    
+    const absencesAsignance = await Absences.create({absences: 0});
+
+    sectionSelected.Courses.map( async course => {
+
+      const findCourse = await Course.findByPk(course.id);
+
+      await findCourse.setAbsences(absencesAsignance.id);
+
+      await findStudent.setAbsences(absencesAsignance.id);
+    })
+
     await sectionSelected.addStudents(findStudent.id);
 
-    return res.status(200).json("Alumno asingado a la sección exitosamente!");
+    return res.status(200).json("El alumno se ha asignado a la sección exitosamente!");
 
   }catch(err){
     console.error(err);
