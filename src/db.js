@@ -94,8 +94,8 @@ Teacher.hasMany(Course);
 Course.belongsTo(Teacher)
 
 //Un Curso tiene muchos alumnos - Un alumno tiene muchos cursos //??? //!EVALUANDO, PROABLEMENTE NO
-Student.belongsToMany(Course, {through: "Student_Course"});
-Course.belongsToMany(Student, {through: "Student_Course"});
+/* Student.belongsToMany(Course, {through: "Student_Course"});
+Course.belongsToMany(Student, {through: "Student_Course"}); */
 
 //Un año escolar tiene muchos grados - Un grado tiene un año escolar
 Year.hasMany(Grade);
