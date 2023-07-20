@@ -54,11 +54,11 @@ const addAbsences = async (req, res, next) => {
   //NECESITO UN CURSO Y UN ALUMNO
   try{
 
-    const { courseId, studentId, absences } = req.query;
+    const { courseId, studentId, absences } = req.body;
 
     if(!courseId) return res.status(400).json("Falta un curso");
     if(!studentId) return res.status(400).json("Falta un alumno");
-    if(!absences) return res.status(400).json("No ha ingresado cuantas inasistencias tiene el alumno");
+    if(!absences && absences !== 0) return res.status(400).json("No ha ingresado cuantas inasistencias tiene el alumno");
 
     //UPDATE DE LA ABSENCES
 
