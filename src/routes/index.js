@@ -11,5 +11,6 @@ router.use('/', require('./academyYear.js'));
 router.use('/', require('./students.js'));
 router.use('/teacher', require('./teacher.js'));
 router.use('/queries', require('./searchQueries.js'));
+router.use('/uploads', require('./uploads.js'));
 
 module.exports = router;

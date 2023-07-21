@@ -1,9 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const multer = require('multer');
 
 //falta requerir las rutas
 const routes = require('./routes/index.js');
+
+const { uploadHomework } = require('./controllers/homeworks.js');
 
 require('./db.js');
 
@@ -21,6 +24,23 @@ server.use( (req,res,next) => {
   res.header('Access-COntrol-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
   next();
 });
+
+//multer
+
+//server.post('/uploads/homeworks', homeworksMiddle.single('myFile'), uploadHomework);
+
+/* const releasesStorage = multer.diskStorage({
+  filename: function (res, file, cb) {
+    const filename = file.originalname.split('.');
+    const ext = filename.pop();
+    const date = Date.now();
+    cb(null, `${filename}_${date}.${ext}`);
+  },
+  destination: function(res, file, cb){
+    cb(null, `./public/releases`);
+  }
+}) */
+
 
 //middleware de las rutas
 server.use('/', routes);
