@@ -21,6 +21,6 @@ const homeworkStorage = multer.diskStorage({
 
 const homeworksMiddle = multer({storage: homeworkStorage})
 
-router.post('/homeworks', homeworksMiddle.single('myFile'), uploadHomework);
+router.post('/homeworks', homeworksMiddle.single('newHomework'), uploadHomework);
 
 module.exports = router;
