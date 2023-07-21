@@ -121,8 +121,8 @@ Course.belongsTo(Section);
 Course.hasMany(Schedules);
 Schedules.belongsTo(Course);
 
-//Una tarea pertenece a un profesor - un profesor pertenece a una tarea
-Teacher.hasOne(Homework);
+//Una tarea pertenece a un profesor - un profesor tiene varias tareas
+Teacher.hasMany(Homework);
 Homework.belongsTo(Teacher);
 
 //Un curso puede tener multiples tareas - una tarea pertenece a un curso

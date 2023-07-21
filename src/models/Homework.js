@@ -6,8 +6,8 @@ module.exports = sequelize => {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    file: {
-      type: DataTypes.BLOB,
+    location: {
+      type: DataTypes.STRING,
       allowNull: true
     }
   },
