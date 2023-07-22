@@ -55,7 +55,8 @@ const {
   Section,
   Homework,
   Calification,
-  Absences
+  Absences,
+  Classes
   } = sequelize.models;
 
 //* Relaciones
@@ -129,6 +130,13 @@ Homework.belongsTo(Teacher);
 Course.hasMany(Homework);
 Homework.belongsTo(Course);
 
+//Subida de clases => igual que homeworks
+Teacher.hasMany(Classes);
+Classes.belongsTo(Teacher);
+
+Course.hasMany(Classes);
+Classes.belongsTo(Course);
+
 //una calificación pertenece a un alumno - un alumno tiene varias calificaciones
 Student.hasMany(Calification);
 Calification.belongsTo(Student);
@@ -148,6 +156,7 @@ Absences.belongsTo(Course);
 //un alumno puede tener muchos registros de inasistencias - un registro de inasistencia pertenece a un alumno 
 Student.hasMany(Absences);
 Absences.belongsTo(Student);
+
 
 module.exports = {
   ...sequelize.models,
