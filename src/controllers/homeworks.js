@@ -19,8 +19,8 @@ const uploadHomework = async (req, res, next) => {
       location: filename
     });
 
-    newHomework.setTeacher(teacherId);
-    newHomework.setCourse(courseId);
+    await newHomework.setTeacher(teacherId);
+    await newHomework.setCourse(courseId);
 
 
     res.status(200).json("TODO OK");
