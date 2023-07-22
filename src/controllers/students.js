@@ -59,13 +59,14 @@ const assignStudents = async (req, res, next) => {
     
     const absencesAsignance = await Absences.create({absences: 0});
 
-    sectionSelected.Courses.map( async course => {
+    await sectionSelected.Courses.map( async course => {
 
       const findCourse = await Course.findByPk(course.id);
+      if(!findCourse) return res.status(400).json("No hay curso");
 
-      await findCourse.setAbsences(absencesAsignance.id);
+      await absencesAsignance.setCourse(findCourse.id);
 
-      await findStudent.setAbsences(absencesAsignance.id);
+      await absencesAsignance.setStudent(findStudent.id);
     })
 
     await sectionSelected.addStudents(findStudent.id);
