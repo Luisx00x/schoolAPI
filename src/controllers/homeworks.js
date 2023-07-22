@@ -33,7 +33,49 @@ const uploadHomework = async (req, res, next) => {
 
 }
 
+const editHomework = async () => {
+
+}
+
+const respondeHomework = async () => {
+
+}
+
+const getHomeworks = async (req, res, next) => {
+
+  try{
+
+    const {courseId, teacherId, rol, year} = req.query;
+
+    if(!courseId) return res.status(400).json("No hay curso para buscar");
+    if(!teacherId) return res.status(400).json("No hay profesor para buscar");
+    if(!rol) return res.status(400).json("No se ha ingresado un rol");
+    if(rol != 5){
+      if(rol != 3){
+        if(rol !=1) return res.status(404).json("No tienes autorización")
+      }
+    }
+
+    const searchHomeworks = await Homework.findAll({
+      where: {
+        TeacherId: teacherId,
+        CourseId: courseId
+      }
+    })
+
+    if(!searchHomeworks.length) return res.status(200).json("No hay ningún registro de tareas")
+
+    return res.status(200).json(searchHomeworks)
+
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+
+}
+
 
 module.exports = {
-  uploadHomework
+  uploadHomework,
+  getHomeworks
 }
