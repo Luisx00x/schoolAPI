@@ -24,6 +24,7 @@ server.use( (req,res,next) => {
 
 //capa para los archivos static
 server.use(express.static('./public/homeworks'));
+server.use(express.static('./public/classes'));
 
 //middleware de las rutas
 server.use('/', routes);
