@@ -5,7 +5,12 @@ async function test(req, res, next) {
 
   try{
 
-    const response = await Section.findAll({include: [{model: Student}]});
+    const response = await Absences.findAll({
+      include: [
+        {model: Student},
+        {model: Course}
+      ]
+    });
 
    /*  const response = await Student.findAll({
       include: [

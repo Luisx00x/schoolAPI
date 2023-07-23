@@ -15,32 +15,40 @@ conn.sync({force: false})
   })
 })
 
-.then( () => {
+/* .then( () => {
 
   ( async function () {
     
-    /* rols.map( async ele => await Rols.create(ele)) */
+    rols.map( async ele => await Rols.create(ele))
   
   }())
 
 })
-/* 
+
 .then( () => {
   ( async function () {
 
-    const encryptedPassword = await newPassword("password");
+    const encryptedPassword = await newPassword("profe123");
+    const encryptedPassword2 = await newPassword("password");
 
-    const user = await User.create({userName: "Rubelino123", password: encryptedPassword});
-    user.setRol(1);
-    
-    const admin = await Administration.create({name: "Ruben", lastName: "Russio", email: "erusion@mail.com"})
+    const user2 = await User.create({userName: "Ruben123", password: encryptedPassword2});
+    user2.setRol(1);
+
+    const admin = await Administration.create({name: "soy", lastName: "lacomadreja" });
     await admin.setUser(1);
+
+    const user = await User.create({userName: "Coba123", password: encryptedPassword});
+    user.setRol(3);
+    
+    const teacher = await Teacher.create({name: "Otro", lastName: "Coba", email: "OtroCoba@mail.com"})
+    await teacher.setUser(2);
+  
   }())
 
 
 
-}) */
-
+})
+ */
 //MOCK
 /* 
 .then( () => {
