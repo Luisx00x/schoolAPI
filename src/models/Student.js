@@ -23,7 +23,7 @@ module.exports = sequelize => {
       allowNull: false
     },
     level: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(['Inicial','Primaria','Secundaria']),
       allowNull: false
     },
     grade: {
