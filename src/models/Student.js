@@ -2,29 +2,42 @@ const { DataTypes } = require('sequelize');
 
 module.exports = sequelize => {
   sequelize.define('Student',{
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    fatherName: {
-      type: DataTypes.STRING,
-      allowNull: true
+    DNI:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
     },
     fatherLastName: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    motherName: {
       type: DataTypes.STRING,
       allowNull: true
     },
     motherLastName: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    names: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    birthdate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
+    gender: {
+      type: DataTypes.ENUM(['M','F']),
+      allowNull: false
+    },
+    grade: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    religion:{
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    prosedence: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     defaulter: {
       type: DataTypes.BOOLEAN,
