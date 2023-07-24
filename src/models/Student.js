@@ -22,19 +22,28 @@ module.exports = sequelize => {
       type: DataTypes.DATEONLY,
       allowNull: false
     },
-    gender: {
-      type: DataTypes.ENUM(['M','F']),
+    level: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     grade: {
       type: DataTypes.STRING,
       allowNull: false
     },
+    sections:{
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: true,
+      defaultValue: []
+    },
+    gender: {
+      type: DataTypes.ENUM(['M','F']),
+      allowNull: false
+    },
     religion:{
       type: DataTypes.STRING,
       allowNull: false
     },
-    prosedence: {
+    procedense: {
       type: DataTypes.STRING,
       allowNull: false
     },
