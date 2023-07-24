@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Student, Teacher, Administration, Course, User, Representative, Grade, Section, Year } = require('../db.js');
+const { Student, Teacher, Administration, Course, User, Parents, Grade, Section, Year } = require('../db.js');
 const { searchCourse, findTeacherByPk } = require('../helpers/searchQueriesHandlers.js');
 
 const searchUser = async (req, res, next) => {
@@ -109,7 +109,7 @@ const searchGrades = async (req, res, next) => {
       }
     })
 
-    if(!searchYear) throw Error("No hay registros de ese año");
+    if(!searchYear) return res.status(200).json([]);
 
     const searchingGrade = await Grade.findAll({
       where: {
@@ -157,7 +157,7 @@ const searchActiveStudents = async (req, res, next) => {
     },
     include: [
       {
-        model: Representative
+        model: Parents
       },
       {
         model: Section
