@@ -10,7 +10,12 @@ const genPDF = async (req, res, next) =>{
 
     const pdfBuffer = await generatePDF({url: url})
   
-    return res.status(200).end(pdfBuffer);
+    return res
+    .status(200)
+    .set({
+      "Content-Type":"application/pdf"
+    })
+    .end(pdfBuffer);
   
   }catch(err){
     console.error(err);
@@ -32,8 +37,7 @@ async function generatePDF({
       isMobile: false,
       hasTouch: false,
       isLandscape: false
-    },
-    executablePath: ""
+    }
   });
 
   const page = await browser.newPage();
@@ -50,6 +54,7 @@ async function generatePDF({
   });
   
   await browser.close();
+  return pdf;
   
 }
 
