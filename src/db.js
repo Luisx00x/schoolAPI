@@ -80,16 +80,16 @@ Student.belongsToMany(Section, {through: "Student_Section"});
 //Un usuario por cada apoderado
 /* User.hasOne(Representative);
 Representative.belongsTo(User); */
-User.hasOne(Parents);
-Parents.belongsTo(User);
+User.hasOne(Representative);
+Representative.belongsTo(User);
 
 //Un estudiante puede tener varios padres - Un padre puede tener varios hijos
 Parents.hasMany(Student);
 Student.belongsTo(Parents);
 
 //Un apoderdo representa a uno o más alumnos
-/* Representative.hasMany(Student);
-Student.belongsTo(Representative); */
+Representative.hasMany(Student);
+Student.belongsTo(Representative);
 
 //Un profesor tiene un usuario
 User.hasOne(Teacher);
