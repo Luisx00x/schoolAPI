@@ -4,8 +4,7 @@ module.exports = sequelize => {
   sequelize.define('Califications', {
     B1: {
       type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F'])),
-      allowNull: false,
-      defaultValue: []
+      allowNull: true
     },
     prom1:{
       type: DataTypes.ENUM(['A','B','C','D','E','F',' ']),
@@ -14,32 +13,29 @@ module.exports = sequelize => {
     },
     B2: {
       type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F'])),
-      allowNull: false,
-      defaultValue: []
+      allowNull: true
     },
     prom2:{
-      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F',' '])),
-      allowNull: false,
+      type: DataTypes.ENUM(['A','B','C','D','E','F',' ']),
+      allowNull: true,
       defaultValue: ' '
     },
     B3: {
       type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F'])),
-      allowNull: false,
-      defaultValue: []
+      allowNull: true
     },
     prom3:{
-      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F',' '])),
-      allowNull: false,
+      type: DataTypes.ENUM(['A','B','C','D','E','F',' ']),
+      allowNull: true,
       defaultValue: ' '
     },
     B4: {
       type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F'])),
-      allowNull: false,
-      defaultValue: []
+      allowNull: true
     },
     prom4:{
-      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F',' '])),
-      allowNull: false,
+      type: DataTypes.ENUM(['A','B','C','D','E','F',' ']),
+      allowNull: true,
       defaultValue: ' '
     },
   },
