@@ -4,8 +4,7 @@ module.exports = sequelize => {
   sequelize.define('Student',{
     DNI:{
       type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
+      allowNull: false
     },
     fatherLastName: {
       type: DataTypes.STRING,
