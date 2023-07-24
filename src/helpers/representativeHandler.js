@@ -1,15 +1,23 @@
-const { Representative, User } = require('../db.js');
+const { Parents, Representative } = require('../db.js');
 const { createObject, createUser } = require('./createUserHandler.js');
 
-const representativeRegister = async (name, lastName, email, studentId) => {
+const representativeRegister = async (DNI, names, lastNames, address, phone, civilStatus, celPhone, email, workPlace, ocuppation, RPMorRPC, isRepresentative, studentId) => {
  
-  const newRepresentative = await createObject(Representative, {name, lastName, email});
+  let newRepresentative;
 
-  const representativeUser = await createUser(name, lastName, newRepresentative.id);
+  if(!isRepresentative){
+    newRepresentative = await createObject(Parents, {names, DNI, lastNames, address, phone, civilStatus, celPhone, email, workPlace, ocuppation, RPMorRPC});
+  }
 
-  representativeUser.setRol(4);
-  newRepresentative.setUser(representativeUser.id);
-  newRepresentative.setStudents(studentId);
+  if(isRepresentative){
+    newRepresentative = await createObject(Representative, {names, DNI, lastNames, address, phone, civilStatus, celPhone, email, workPlace, ocuppation, RPMorRPC});
+    const representativeUser = await createUser(names, lastNames, newRepresentative.id);
+    representativeUser.setRol(4);
+    newRepresentative.setUser(representativeUser.id);
+  }
+  
+
+  newRepresentative.addStudents(studentId);
 
   return newRepresentative
 

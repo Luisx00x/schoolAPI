@@ -3,35 +3,73 @@ const { User, Student, Teacher, Administration, Representative  } = require('../
 const { representativeRegister } = require('../helpers/representativeHandler.js');
 const { createObject, createUser } = require('../helpers/createUserHandler.js');
 const { compare } = require('../helpers/bcryptHandler.js');
+const { Op } = require('sequelize');
 
 const registerController = async (req, res, next) => {
 
     const {
-      name,
-      lastName,  
-      userRol,
-      email,
-      fatherName,
+      studentDNI,
+      names,
       fatherLastName,
-      motherName,
       motherLastName,
+      birthdate,
+      gender,
+      level,
+      grade,
+      religion,
+      procedense,
+      userRol,
+      fatherDNI,
+      fatherLastNames,
+      fatherName,
+      fatherAddress,
+      fatherPhone,
+      fatherCivil,
+      fatherCelphone,
+      fatherEmail,
+      fatherWorkPlace,
+      fatherOccup,
+      fatherRPMorRPC,
+      motherDNI,  
+      motherLastNames,
+      motherName,
+      motherAddress,
+      motherPhone,
+      motherCivil,
+      motherCelPhone,
+      motherEmail,
+      motherWorkPlace,
+      motherOccup,
+      motherRPMorRPC,
       representative
     } = req.body;
 
     try{
-      
-      if(!name) return res.status(400).json("Debe ingresar un nombre");
-      if(!lastName) return res.status(400).json("Debe ingresar un apellido");
-      if(!email) return res.status(400).json("Se debe especificar un email");
+      if(!names) return res.status(400).json("Debe ingresar un nombre para el alumno ");
+      if(!birthdate) return res.status(400).json("Se debe ingresar una fecha de nacimiento del alumno");
+      if(!gender) return res.status(400).json("Debe ingresar el genero del alumno");
+      if(!level) return res.status(400).json("Debe seleccionar un nivel educativo");
+      if(!grade) return res.status(400).json("Se debe seleccionar el grado del alumno");
+      if(!religion) return res.status(400).json("Se debe especificar la religión del alumno");
+      if(!representative) return res.status(400).json("Debe haber un apoderado responsable del alumno");
+      if(!fatherEmail && !motherEmail) return res.status(400).json("Se debe especificar un email para el apoderado");
       if(!userRol) return res.status(400).json("Se debe especificar el tipo de usuario");
+      if(fatherDNI && !fatherCivil) return res.status(400).json("El padre debe especificar su estado civil");
+      if(fatherDNI && !fatherAddress) return res.status(400).json("El padre debe especificar una dirección");
+      if(fatherDNI && !fatherEmail) return res.status(400).json("Se debe especificar un correo para el padre");
+      if(motherDNI && !motherCivil) return res.status(400).json("La madre debe especificar su estado civil");
+      if(motherDNI && !motherAddress) return res.status(400).json("La madre debe especificar una dirrección");
       
-      if(userRol === 2){
+      console.log("ENTRO")
+      //Alumno
+      if(parseInt(userRol) === 2){
+
 
         if(!representative) return res.status(400).json("Se debe seleccionar un apoderado");
         
         const searchParent = await Representative.findOne({
           where: {
-            email: email
+              [Op.or] : [{DNI: fatherDNI}, {DNI: motherDNI}]  
           },
           include: [
             {
@@ -40,13 +78,15 @@ const registerController = async (req, res, next) => {
           ]
         });
 
+        //Busca a el alumno entre los alumnos relacionados con el apoderado
         if(searchParent) {
 
           const searchChild = await Student.findOne({
             where: {
-              RepresentativeId: searchParent.id,
-              name,
-              lastName
+              RepresentativeDNI: searchParent.DNI,
+              names,
+              fatherLastName,
+              motherLastName
             }
           })
 
@@ -57,32 +97,49 @@ const registerController = async (req, res, next) => {
 
         const newStudent = await createObject(Student, 
           {
-            name, 
-            lastName, 
-            fatherName,
-            fatherLastName,
-            motherName,
-            motherLastName
+            DNI: studentDNI,
+            names, 
+            fatherLastName, 
+            motherLastName,
+            birthdate,
+            gender,
+            level,
+            grade,
+            religion,
+            procedense
           });
 
-        const newUser = await createUser(name, lastName, newStudent.id);
+        const newUser = await createUser(names, fatherLastName, newStudent.id);
 
         await newUser.setRol(userRol);  
         await newStudent.setUser(newUser.id);
 
+        //Creación de los padres
         if(!searchParent){
 
-          const newRepresentative = representative === 1 ? 
-          await representativeRegister(fatherName, fatherLastName, email, newStudent.id) : 
-          await representativeRegister(motherName, motherLastName, email, newStudent.id);
+          //(DNI, names, lastNames, address, phone, civilStatus, celPhone, email, workPlace, ocuppation, RPMorRPC, studentId)
+          let isFatherRep = false, isMotherRep = false
 
-        }else searchParent.setStudents(newStudent.id);
+          if(parseInt(representative) === 1) isFatherRep = true;
+          if(parseInt(representative) === 2) isMotherRep = true;
+
+          if(fatherDNI){
+            await representativeRegister(fatherDNI, fatherName, fatherLastNames, fatherAddress, fatherPhone, fatherCivil, fatherCelphone, fatherEmail, fatherWorkPlace, fatherOccup, fatherRPMorRPC, isFatherRep, newStudent.id); 
+          }
+          if(motherDNI){
+            await representativeRegister(motherDNI, motherName, motherLastNames, motherAddress, motherPhone, motherCivil, motherCelPhone, motherEmail, motherWorkPlace, motherOccup, motherRPMorRPC, isMotherRep, newStudent.id);
+          }
+
+
+        }else {
+          searchParent.setStudents(newStudent.id);
+        }
 
         return res.status(200).json("El usuario del alumno y su apoderado se han creado exitosamente");
 
       }else
 
-      if(userRol === 3){
+      if(parseInt(userRol) === 3){
 
         const searchTeacher = await Teacher.findOne({
           where: {
@@ -109,7 +166,7 @@ const registerController = async (req, res, next) => {
 
       }else
       
-      if(userRol === 1){
+      if(parseInt(userRol) === 1){
 
         const searchAdmin = await Administration.findOne({
           where: {
@@ -131,6 +188,10 @@ const registerController = async (req, res, next) => {
           return res.status(200).json("El aministrador fue registrado exitosamente!");
 
         }
+
+      }else{
+        
+        return res.status(200).json("No se pudo procesar su solicitud")
 
       }
 
