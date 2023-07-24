@@ -4,7 +4,7 @@ module.exports = sequelize => {
   sequelize.define('Student',{
     DNI:{
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     fatherLastName: {
       type: DataTypes.STRING,
@@ -45,7 +45,7 @@ module.exports = sequelize => {
     },
     procedense: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     defaulter: {
       type: DataTypes.BOOLEAN,
