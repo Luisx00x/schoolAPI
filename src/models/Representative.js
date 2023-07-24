@@ -2,17 +2,50 @@ const { DataTypes } = require('sequelize');
 
 module.exports = sequelize => {
   sequelize.define('Representative', {
-    name: {
+    DNI: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false
+    },
+    names: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    lastName: {
+    lastNames: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    address: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    phone: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    civilStatus: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    celPhone: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
+    },
+    workPlace: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    ocuppation: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    RPMorRPC: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   },
   {

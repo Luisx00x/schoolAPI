@@ -7,11 +7,6 @@ module.exports = sequelize => {
       primaryKey: true,
       allowNull: false
     },
-    isRepresentative: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
-    },
     names: {
       type: DataTypes.STRING,
       allowNull: false
