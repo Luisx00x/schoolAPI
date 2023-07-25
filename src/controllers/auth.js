@@ -66,23 +66,37 @@ const registerController = async (req, res, next) => {
 
         if(!representative) return res.status(400).json("Se debe seleccionar un apoderado");
         
-        const searchParent = await Representative.findOne({
-          where: {
-              [Op.or] : [{DNI: fatherDNI}, {DNI: motherDNI}]  
-          },
-          include: [
-            {
-              model: Student
-            }
-          ]
-        });
+        let representativeSearch;
+
+        if(fatherDNI){
+          const searchParent = await Representative.findOne({
+            where:{
+              DNI: parseInt(fatherDNI)
+            },
+            include: [
+              { model: Student }
+            ]
+          })
+          if(searchParent) representativeSearch = searchParent;
+        }
+        if(motherDNI){
+          const searchParent = await Representative.findOne({
+            where:{
+              DNI: parseInt(motherDNI)
+            },
+            include: [
+              { model: Student }
+            ]
+          })
+          if(searchParent) representativeSearch = searchParent;
+        }
 
         //Busca a el alumno entre los alumnos relacionados con el apoderado
-        if(searchParent) {
+        if(representativeSearch) {
 
           const searchChild = await Student.findOne({
             where: {
-              RepresentativeDNI: searchParent.DNI,
+              RepresentativeDNI: representativeSearch.DNI,
               names,
               fatherLastName,
               motherLastName
@@ -96,7 +110,7 @@ const registerController = async (req, res, next) => {
 
         const newStudent = await createObject(Student, 
           {
-            DNI: studentDNI,
+            DNI: parseInt(studentDNI),
             names, 
             fatherLastName, 
             motherLastName,
@@ -114,7 +128,7 @@ const registerController = async (req, res, next) => {
         await newStudent.setUser(newUser.id);
 
         //Creación de los padres
-        if(!searchParent){
+        if(!representativeSearch){
 
           //(DNI, names, lastNames, address, phone, civilStatus, celPhone, email, workPlace, ocuppation, RPMorRPC, studentId)
           let isFatherRep = false, isMotherRep = false
@@ -123,15 +137,15 @@ const registerController = async (req, res, next) => {
           if(parseInt(representative) === 2) isMotherRep = true;
 
           if(fatherDNI){
-            await representativeRegister(fatherDNI, fatherName, fatherLastNames, fatherAddress, fatherPhone, fatherCivil, fatherCelphone, fatherEmail, fatherWorkPlace, fatherOccup, fatherRPMorRPC, isFatherRep, newStudent.id); 
+            await representativeRegister(parseInt(fatherDNI), fatherName, fatherLastNames, fatherAddress, fatherPhone, fatherCivil, fatherCelphone, fatherEmail, fatherWorkPlace, fatherOccup, fatherRPMorRPC, isFatherRep, newStudent.id); 
           }
           if(motherDNI){
-            await representativeRegister(motherDNI, motherName, motherLastNames, motherAddress, motherPhone, motherCivil, motherCelPhone, motherEmail, motherWorkPlace, motherOccup, motherRPMorRPC, isMotherRep, newStudent.id);
+            await representativeRegister(parseInt(motherDNI), motherName, motherLastNames, motherAddress, motherPhone, motherCivil, motherCelPhone, motherEmail, motherWorkPlace, motherOccup, motherRPMorRPC, isMotherRep, newStudent.id);
           }
 
 
         }else {
-          searchParent.setStudents(newStudent.id);
+          representativeSearch.setStudents(newStudent.id);
         }
 
         return res.status(200).json("El usuario del alumno y su apoderado se han creado exitosamente");
