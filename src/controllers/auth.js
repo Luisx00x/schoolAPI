@@ -59,8 +59,7 @@ const registerController = async (req, res, next) => {
       if(fatherDNI && !fatherEmail) return res.status(400).json("Se debe especificar un correo para el padre");
       if(motherDNI && !motherCivil) return res.status(400).json("La madre debe especificar su estado civil");
       if(motherDNI && !motherAddress) return res.status(400).json("La madre debe especificar una dirrección");
-      
-      console.log("ENTRO")
+   
       //Alumno
       if(parseInt(userRol) === 2){
 

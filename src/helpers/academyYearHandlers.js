@@ -1,10 +1,11 @@
 const { Grade, Section } = require('../db.js');
 
-const gradeAssignment = async (yearId, level) =>{
+const gradeAssignment = async (yearId, grades, level) =>{
 
-  for(let grade of level){
+  for(let grade of grades){
 
     const newGrade = await Grade.create({
+      level,
       grade: grade.gradeName
     });
  
