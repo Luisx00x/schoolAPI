@@ -63,7 +63,6 @@ const registerController = async (req, res, next) => {
       //Alumno
       if(parseInt(userRol) === 2){
 
-
         if(!representative) return res.status(400).json("Se debe seleccionar un apoderado");
         
         let representativeSearch;
@@ -71,7 +70,7 @@ const registerController = async (req, res, next) => {
         if(fatherDNI){
           const searchParent = await Representative.findOne({
             where:{
-              DNI: parseInt(fatherDNI)
+              DNI: fatherDNI
             },
             include: [
               { model: Student }
@@ -82,7 +81,7 @@ const registerController = async (req, res, next) => {
         if(motherDNI){
           const searchParent = await Representative.findOne({
             where:{
-              DNI: parseInt(motherDNI)
+              DNI: motherDNI
             },
             include: [
               { model: Student }
@@ -107,10 +106,15 @@ const registerController = async (req, res, next) => {
           //aqui es la interrupcion
         
         }
+        let safeDNI;
+        if(studentDNI === "") safeDNI = null
+        else{
+          safeDNI = studentDNI
+        }
 
         const newStudent = await createObject(Student, 
           {
-            DNI: parseInt(studentDNI),
+            DNI: safeDNI,
             names, 
             fatherLastName, 
             motherLastName,
@@ -137,10 +141,10 @@ const registerController = async (req, res, next) => {
           if(parseInt(representative) === 2) isMotherRep = true;
 
           if(fatherDNI){
-            await representativeRegister(parseInt(fatherDNI), fatherName, fatherLastNames, fatherAddress, fatherPhone, fatherCivil, fatherCelphone, fatherEmail, fatherWorkPlace, fatherOccup, fatherRPMorRPC, isFatherRep, newStudent.id); 
+            await representativeRegister(fatherDNI, fatherName, fatherLastNames, fatherAddress, fatherPhone, fatherCivil, fatherCelphone, fatherEmail, fatherWorkPlace, fatherOccup, fatherRPMorRPC, isFatherRep, newStudent.id); 
           }
           if(motherDNI){
-            await representativeRegister(parseInt(motherDNI), motherName, motherLastNames, motherAddress, motherPhone, motherCivil, motherCelPhone, motherEmail, motherWorkPlace, motherOccup, motherRPMorRPC, isMotherRep, newStudent.id);
+            await representativeRegister(motherDNI, motherName, motherLastNames, motherAddress, motherPhone, motherCivil, motherCelPhone, motherEmail, motherWorkPlace, motherOccup, motherRPMorRPC, isMotherRep, newStudent.id);
           }
 
 
