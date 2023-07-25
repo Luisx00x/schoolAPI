@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Student, Teacher, Administration, Course, User, Parents, Grade, Section, Year } = require('../db.js');
+const { Student, Representative, Teacher, Administration, Course, User, Parents, Grade, Section, Year } = require('../db.js');
 const { searchCourse, findTeacherByPk } = require('../helpers/searchQueriesHandlers.js');
 
 const searchUser = async (req, res, next) => {
@@ -158,6 +158,9 @@ const searchActiveStudents = async (req, res, next) => {
     include: [
       {
         model: Parents
+      },
+      {
+        model: Representative
       },
       {
         model: Section
