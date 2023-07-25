@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 module.exports = sequelize => {
   sequelize.define('Representative', {
     DNI: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       primaryKey: true,
       allowNull: false
     },
