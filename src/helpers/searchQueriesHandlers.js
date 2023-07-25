@@ -36,7 +36,7 @@ const findTeacherByPk = async (user) => {
                 { model: Grade },
                 { 
                   model: Student, 
-                  attributes: ["id","name","lastName"],
+                  attributes: ["id","names","fatherLastName","motherLastName"],
                   include: [
                     {model: Absences}
                   ]
