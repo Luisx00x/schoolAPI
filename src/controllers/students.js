@@ -1,4 +1,4 @@
-const { Grade, Section, Student, Year, Course, Absences } = require('../db.js');
+const { Grade, Section, Student, Year, Course, Absences, Califications } = require('../db.js');
 
 const assignStudents = async (req, res, next) => {
 
@@ -62,7 +62,13 @@ const assignStudents = async (req, res, next) => {
     await sectionSelected.Courses.map( async course => {
 
       const findCourse = await Course.findByPk(course.id);
+
+      const createCalification = await Califications.create();
+
       if(!findCourse) return res.status(400).json("No hay curso");
+
+      await createCalification.setStudent(findStudent.id);
+      await createCalification.setCourse(findCourse.id);
 
       await absencesAsignance.setCourse(findCourse.id);
 

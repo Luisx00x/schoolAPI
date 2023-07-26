@@ -8,7 +8,7 @@ module.exports = sequelize => {
     },
     prom1:{
       type: DataTypes.ENUM(['A','B','C','D','E','F',' ']),
-      allowNull: false,
+      allowNull: true,
       defaultValue: ' '
     },
     B2: {
