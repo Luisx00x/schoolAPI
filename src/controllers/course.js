@@ -7,6 +7,7 @@ const createCourse = async (req, res, next) => {
     gradeId, 
     days,   //Array de objetos, una posicion por dia, un objeto con dia, y horas
     skills,
+    Abbrev,
     teacherId, 
     sectionId,
   } = req.body;
@@ -19,7 +20,8 @@ const createCourse = async (req, res, next) => {
     if(!teacherId) return res.status(400).json("No se ha especificado un profesor");
     if(!sectionId) return res.status(400).json("No se ha especificado una sección");
     if(days.length < 1) return res.status(400).json("Se tiene que establecer al menos un dia para el curso");
-    if(skills.length < 1) return res.status(400).json("Debe haber al menos una competencia")
+    if(skills.length < 1) return res.status(400).json("Debe haber al menos una competencia");
+    if(Abbrev.length < skills.length) return res.status(400).json("Faltan abreviaciones de las competencias");
 
     const searchCourse = await Course.findAll({
       where: {
@@ -51,7 +53,8 @@ const createCourse = async (req, res, next) => {
 
     const createCourse = await Course.create({
       courseName,
-      skills
+      skills,
+      Abbrev
     });
 
     // Se busca al profesor ingresado

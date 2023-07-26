@@ -9,6 +9,10 @@ module.exports = sequelize => {
     skills:{
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false
+    },
+    Abbrev:{
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: false
     }
   },
   {
