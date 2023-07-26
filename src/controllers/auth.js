@@ -149,7 +149,7 @@ const registerController = async (req, res, next) => {
 
 
         }else {
-          representativeSearch.setStudents(newStudent.id);
+          representativeSearch.addStudents(newStudent.id);
         }
 
         return res.status(200).json("El usuario del alumno y su apoderado se han creado exitosamente");
