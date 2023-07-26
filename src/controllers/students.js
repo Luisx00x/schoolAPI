@@ -69,6 +69,14 @@ const assignStudents = async (req, res, next) => {
 
       await createCalification.setStudent(findStudent.id);
       await createCalification.setCourse(findCourse.id);
+      
+      let calif = [];
+
+      for(let i = 0; i < findCourse.skills.length; i++){
+        calif.push(" ");
+      }
+
+      await createCalification.update({B1: calif, B2: calif, B3: calif, B4: calif });
 
       await absencesAsignance.setCourse(findCourse.id);
 

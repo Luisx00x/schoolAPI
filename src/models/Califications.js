@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 module.exports = sequelize => {
   sequelize.define('Califications', {
     B1: {
-      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F'])),
+      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F',' '])),
       allowNull: true
     },
     prom1:{
@@ -12,7 +12,7 @@ module.exports = sequelize => {
       defaultValue: ' '
     },
     B2: {
-      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F'])),
+      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F',' '])),
       allowNull: true
     },
     prom2:{
@@ -21,7 +21,7 @@ module.exports = sequelize => {
       defaultValue: ' '
     },
     B3: {
-      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F'])),
+      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F',' '])),
       allowNull: true
     },
     prom3:{
@@ -30,7 +30,7 @@ module.exports = sequelize => {
       defaultValue: ' '
     },
     B4: {
-      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F'])),
+      type: DataTypes.ARRAY(DataTypes.ENUM(['A','B','C','D','E','F',' '])),
       allowNull: true
     },
     prom4:{
