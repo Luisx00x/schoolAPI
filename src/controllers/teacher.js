@@ -1,4 +1,4 @@
-const { Year, Teacher, Absences, Course } = require('../db.js');
+const { Year, Teacher, Absences, Course, Student, Califications } = require('../db.js');
 const { findTeacherByPk } = require('../helpers/searchQueriesHandlers.js');
 
 const searchTeacherCourses = async (req, res, next) => {
@@ -88,7 +88,63 @@ const addAbsences = async (req, res, next) => {
 
 }
 
+const registerCalifications = async (req, res, next) => {
+
+  console.log(req.body)
+  
+  try{
+
+    const { calificationId, B1, B2, B3, B4, prom1, prom2, prom3, prom4 } = req.body;
+
+    if(!B1 || !B2 || !B3 || !B4 ){
+      return res.status(400).json("La data se encuentra imcompleta")
+    }
+
+    if(!calificationId) return res.status(400).json("Falta la id de la sección de calificaciones");
+    
+    const formatData = {
+      B1: [],
+      B2: [],
+      B3: [],
+      B4: [],
+      prom1: "",
+      prom2: "",
+      prom3: "",
+      prom4: ""
+    }
+
+    B1.forEach( (undefined, index) => {
+      const evalB1 = B1[index] === "" ? " " : B1[index];
+      formatData.B1.push(evalB1);
+      const evalB2 = B2[index] === "" ? " " : B2[index];
+      formatData.B2.push(evalB2);
+      const evalB3 = B3[index] === "" ? " " : B3[index];
+      formatData.B3.push(evalB3);
+      const evalB4 = B4[index] === "" ? " " : B4[index];
+      formatData.B4.push(evalB4);
+    } )
+
+    formatData.prom1 = prom1 === "" ? " " : prom1;
+    formatData.prom2 = prom2 === "" ? " " : prom2;
+    formatData.prom3 = prom3 === "" ? " " : prom3;
+    formatData.prom4 = prom4 === "" ? " " : prom4;
+
+    const searchCalification = await Califications.findByPk(calificationId);
+    
+    if(!searchCalification) return res.status(400).json("No existe la nota que desea actualizar")
+
+    await searchCalification.update(formatData);
+    
+    return res.status(200).json("Subida de notas exitosa!")
+
+    }catch(err){
+      next(err);
+    }
+
+}
+
 module.exports = {
   searchTeacherCourses,
-  addAbsences
+  addAbsences,
+  registerCalifications
 }
