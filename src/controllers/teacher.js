@@ -74,7 +74,7 @@ const addAbsences = async (req, res, next) => {
   //NECESITO UN CURSO Y UN ALUMNO
   try{
 
-    const { courseId, studentId, absences } = req.body;
+    const { courseId, studentId, absences, justifiedFault, delays } = req.body;
 
     if(!courseId) return res.status(400).json("Falta un curso");
     if(!studentId) return res.status(400).json("Falta un alumno");
@@ -94,7 +94,9 @@ const addAbsences = async (req, res, next) => {
      
     //Actualizando
     await studentAbsences.update({
-      absences: absences
+      absences: absences,
+      justifiedFault,
+      delays
     })
 
     return res.status(200).json("Asistencias del alumno actualizadas")
