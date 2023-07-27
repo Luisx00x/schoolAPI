@@ -57,7 +57,9 @@ const {
   Califications,
   Absences,
   Classes,
-  Parents
+  Parents,
+  StudentReleases,
+  ParentsReleases
   } = sequelize.models;
 
 //* Relaciones
@@ -164,6 +166,13 @@ Absences.belongsTo(Course);
 Student.hasMany(Absences);
 Absences.belongsTo(Student);
 
+//Notificaciones para alumnos y seccion
+Student.belongsToMany(StudentReleases, {through: "Sudent_Releases"});
+StudentReleases.belongsToMany(Student, {through: "Sudent_Releases"});
+
+//Notificaciones para padres
+Representative.belongsToMany(ParentsReleases, {through: "Parents_Relesases"});
+ParentsReleases.belongsToMany(Representative, {through: "Parents_Relesases"});
 
 module.exports = {
   ...sequelize.models,
