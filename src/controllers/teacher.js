@@ -49,6 +49,26 @@ const searchTeacherCourses = async (req, res, next) => {
 
 }
 
+const searchAbsences = async (req, res, next) => {
+  
+  try {
+
+    const { courseId } = req.query;
+
+    const searchAbsences = await Absences.findAll({
+      where: {
+        CourseId: courseId
+      }
+    })
+
+    return res.status(200).json(searchAbsences);
+
+  }catch(err){
+    next(err)
+  }
+
+}
+
 const addAbsences = async (req, res, next) => {
   
   //NECESITO UN CURSO Y UN ALUMNO
@@ -146,5 +166,6 @@ const registerCalifications = async (req, res, next) => {
 module.exports = {
   searchTeacherCourses,
   addAbsences,
-  registerCalifications
+  registerCalifications,
+  searchAbsences
 }
