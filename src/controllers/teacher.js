@@ -88,18 +88,16 @@ const addAbsences = async (req, res, next) => {
       ]
     });
 
-    const student = course.Absences.find( absences => {
-      if(absences.StudentId == studentId) return absences
-    });
+     const studentAbsences = course.Absences.find( absences => absences.StudentId == studentId );
 
-    const studentAbsences = await Absences.findByPk(student.StudentId);
-    
+    const searchAbsence = await Absences.findByPk(studentAbsences.id);
+     
     //Actualizando
     await studentAbsences.update({
       absences: absences
     })
 
-    return res.status(200).json("Inasistencias actualizadas!")
+    return res.status(200).json("Asistencias del alumno actualizadas")
     
   }catch(err){
     console.error(err);
