@@ -57,9 +57,10 @@ const assignStudents = async (req, res, next) => {
     //Se relaciona el estudiante con todos los cursos de la sección
     //sectionSelected.Courses
     
-    const absencesAsignance = await Absences.create({absences: 0});
-
+    
     await sectionSelected.Courses.map( async course => {
+
+      const absencesAsignance = await Absences.create({absences: 0});
 
       const findCourse = await Course.findByPk(course.id);
 
