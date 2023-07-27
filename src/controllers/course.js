@@ -44,10 +44,7 @@ const createCourse = async (req, res, next) => {
 
     
     //* REQUIERE UNA SECCIÓN PARA COMPARAR CON EL NOMBRE DEL GRADO QUE RECIBE
-    const valiadteCourse = searchCourse.find( ele => {
-      
-      if(ele.Section) return ele.Section.GradeId === parseInt(gradeId);
-    })
+    const valiadteCourse = searchCourse.find( ele => ele.Section.id === parseInt(sectionId));
     
     if(valiadteCourse) return res.status(200).json({msg: "El Curso ya existe", valiadteCourse});
 
