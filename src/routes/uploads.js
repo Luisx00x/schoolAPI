@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { uploadHomework } = require('../controllers/homeworks');
 const multer = require('multer');
 const { uploadClasses } = require('../controllers/classes');
+const { createRelease } = require('../controllers/SectionReleases');
 const router = Router();
 
 //Multer
@@ -40,6 +41,22 @@ const clasessMiddle = multer({storage: classesStorage});
 
 router.post(`/classes`, clasessMiddle.single(`newClass`), uploadClasses);
 
+//Cominicado para comunicados
+const releasesStorage = multer.diskStorage({
+  filename: function(res, file, cb){
+    const filename = file.originalname.split('.');
+    const ext = filename.pop();
+    const date = Date.now();
+    cb(null, `${filename}_${date}.${ext}`);
+  },
+  destination: function(res, file, cb) {
+    cb(null, `./public/releases`);
+  }
+})
+
+const releasesMiddle = multer({storage: releasesStorage});
+
+router.post(`/releases`, releasesMiddle.single(`newRelease`), createRelease);
 
 
 module.exports = router;

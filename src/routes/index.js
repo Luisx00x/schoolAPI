@@ -14,6 +14,7 @@ router.use('/parents', require('./parents.js'));
 router.use('/queries', require('./searchQueries.js'));
 router.use('/uploads', require('./uploads.js'));
 router.use('/homeworks', require('./homeworks.js'));
+router.use('/releases', require('./releases.js'));
 router.use('/puppeteer', require('./reportCards.js'));
 
 module.exports = router;
