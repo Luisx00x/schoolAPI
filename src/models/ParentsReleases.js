@@ -6,6 +6,10 @@ module.exports = sequelize => {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    sender:{
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
     location: {
       type: DataTypes.TEXT,
       allowNull: false

@@ -1,22 +1,22 @@
 const { DataTypes } = require('sequelize');
 
-module.exports = sequelieze => {
-  sequelieze.define('StudentReleases',{
-    title:{
+module.exports = sequelize => {
+  sequelize.define('SectionReleases', {
+    title: {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    sender:{
+    sender: {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    location:{
+    location: {
       type: DataTypes.TEXT,
       allowNull: false
-    },
+    }
   },
   {
-    timestamps: true,
-    freezeTableName:true
+    timestamp: true,
+    freezeTableName: true
   })
 }
