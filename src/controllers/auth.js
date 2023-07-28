@@ -10,6 +10,7 @@ const registerController = async (req, res, next) => {
     const {
       studentDNI,
       names,
+      teacherLastNames,
       fatherLastName,
       motherLastName,
       birthdate,
@@ -41,24 +42,32 @@ const registerController = async (req, res, next) => {
       motherWorkPlace,
       motherOccup,
       motherRPMorRPC,
-      representative
+      representative,
+      email
     } = req.body;
 
+    console.log(req.body)
+
     try{
-      if(!names) return res.status(400).json("Debe ingresar un nombre para el alumno ");
-      if(!birthdate) return res.status(400).json("Se debe ingresar una fecha de nacimiento del alumno");
-      if(!gender) return res.status(400).json("Debe ingresar el genero del alumno");
-      if(!level) return res.status(400).json("Debe seleccionar un nivel educativo");
-      if(!grade) return res.status(400).json("Se debe seleccionar el grado del alumno");
-      if(!religion) return res.status(400).json("Se debe especificar la religión del alumno");
-      if(!representative) return res.status(400).json("Debe haber un apoderado responsable del alumno");
-      if(!fatherEmail && !motherEmail) return res.status(400).json("Se debe especificar un email para el apoderado");
       if(!userRol) return res.status(400).json("Se debe especificar el tipo de usuario");
-      if(fatherDNI && !fatherCivil) return res.status(400).json("El padre debe especificar su estado civil");
-      if(fatherDNI && !fatherAddress) return res.status(400).json("El padre debe especificar una dirección");
-      if(fatherDNI && !fatherEmail) return res.status(400).json("Se debe especificar un correo para el padre");
-      if(motherDNI && !motherCivil) return res.status(400).json("La madre debe especificar su estado civil");
-      if(motherDNI && !motherAddress) return res.status(400).json("La madre debe especificar una dirrección");
+      if(!names) return res.status(400).json("Debe ingresar el nombre del nuevo usuario");
+      if(!email && userRol != 2) return res.status(400).json("El usuario requiere un email");
+      if(!teacherLastNames && userRol != 2) return res.status(400).json("El usuario require apellidos");
+
+      if(userRol == 2){
+        if(!birthdate) return res.status(400).json("Se debe ingresar una fecha de nacimiento del alumno");
+        if(!gender) return res.status(400).json("Debe ingresar el genero del alumno");
+        if(!level) return res.status(400).json("Debe seleccionar un nivel educativo");
+        if(!grade) return res.status(400).json("Se debe seleccionar el grado del alumno");
+        if(!religion) return res.status(400).json("Se debe especificar la religión del alumno");
+        if(!representative) return res.status(400).json("Debe haber un apoderado responsable del alumno");
+        if(!fatherEmail && !motherEmail) return res.status(400).json("Se debe especificar un email para el apoderado");
+        if(fatherDNI && !fatherCivil) return res.status(400).json("El padre debe especificar su estado civil");
+        if(fatherDNI && !fatherAddress) return res.status(400).json("El padre debe especificar una dirección");
+        if(fatherDNI && !fatherEmail) return res.status(400).json("Se debe especificar un correo para el padre");
+        if(motherDNI && !motherCivil) return res.status(400).json("La madre debe especificar su estado civil");
+        if(motherDNI && !motherAddress) return res.status(400).json("La madre debe especificar una dirrección");
+      }
    
       //Alumno
       if(parseInt(userRol) === 2){
@@ -170,9 +179,9 @@ const registerController = async (req, res, next) => {
         
         else{
 
-          const newTeacher = await createObject(Teacher, {name, lastName, email});
+          const newTeacher = await createObject(Teacher, {name: names, lastName: teacherLastNames, email});
 
-          const newUser = await createUser(name, lastName, newTeacher.id);
+          const newUser = await createUser(names, teacherLastNames, newTeacher.id);
 
           await newUser.setRol(userRol);
           await newTeacher.setUser(newUser.id);
