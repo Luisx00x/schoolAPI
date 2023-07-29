@@ -62,6 +62,7 @@ const createRelease = async (req, res, next) => {
         const newRelease = await ParentsReleases.create({
           title,
           sender: senderValue,
+          studentId: studentId,
           location: filename
         })
   

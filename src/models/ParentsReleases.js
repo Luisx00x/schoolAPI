@@ -6,6 +6,10 @@ module.exports = sequelize => {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    studentId:{
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     sender:{
       type: DataTypes.TEXT,
       allowNull: false
