@@ -95,6 +95,25 @@ const assignStudents = async (req, res, next) => {
 
 }
 
+const searchSectionStudents = async (req, res, next) => {
+
+  const { sectionId } = req.query;
+
+  if(!sectionId) return res.status(200).json("Hace falta una sección");
+
+  const searchSection = await Section.findByPk(sectionId,{
+    include: {
+      model: Student
+    }
+  });
+
+  if(!searchSection) return res.status(200).json("No se encontro la sección que busca");
+
+  return res.status(200).json(searchSection);
+
+}
+
 module.exports = {
-  assignStudents
+  assignStudents,
+  searchSectionStudents
 }
