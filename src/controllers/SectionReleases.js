@@ -1,10 +1,10 @@
-const { SectionReleases, StudentReleases, Teacher, Section, Student } = require('../db.js');
+const { SectionReleases, ParentsReleases, StudentReleases, Representative, Teacher, Section, Student } = require('../db.js');
 
 const createRelease = async (req, res, next) => {
 
   try{
 
-    const { userRol, sender, title, sectionId, studentId } = req.body;
+    const { userRol, sender, title, sectionId, studentId, representative } = req.body;
     const {filename} = req.file;
 
     if(!userRol) return res.status(400).json("El solicitante no es un usuario");
@@ -38,6 +38,39 @@ const createRelease = async (req, res, next) => {
       }
 
       //TODO AQUI VA SI ES ADMIN
+
+    }
+
+    if(representative){
+
+      if(userRol == 3){
+
+        const teacherInfo = await Teacher.findByPk(sender);
+  
+        if(!teacherInfo) return res.status(400).json("No hay registros de ese profesor");
+  
+        const searchStudent= await Student.findByPk(studentId);
+  
+        if(!searchStudent) return res.status(400).json("No existe el estudiante buscado");
+
+        const findParent = await Representative.findByPk(searchStudent.RepresentativeDNI);
+
+        if(!findParent) return res.status(400).json("El apoderado no existe");
+  
+        const senderValue = `${teacherInfo.name} ${teacherInfo.lastName}`;
+  
+        const newRelease = await ParentsReleases.create({
+          title,
+          sender: senderValue,
+          location: filename
+        })
+  
+        //Conexion con sectionID para hacer las queries
+        await newRelease.setRepresentative(findParent.DNI);
+  
+        return res.status(200).json("TODO OK")
+
+      }
 
     }
 

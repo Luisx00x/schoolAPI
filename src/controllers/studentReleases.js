@@ -8,7 +8,9 @@ const findOneStudent = async (req, res, next) => {
 
     if(!studentId) return res.status(400).json("Falta un estudiante para buscar");
 
-    if(!findOneStudent) return res.status(400).json("El alumno que busca no existe");
+    const findStudent = await Student.findByPk(studentId);
+
+    if(!findStudent) return res.status(400).json("El alumno que busca no existe");
 
     const findReleases = await StudentReleases.findAll({
       where: {
