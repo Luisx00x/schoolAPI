@@ -32,7 +32,7 @@ const createRelease = async (req, res, next) => {
         location: filename
       })
 
-      //COnecion con sectionID para hacer las queries
+      //Conexion con sectionID para hacer las queries
       await newRelease.setSection(sectionId);
 
       return res.status(200).json("TODO OK")
