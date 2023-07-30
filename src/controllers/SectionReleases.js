@@ -1,4 +1,4 @@
-const { SectionReleases, ParentsReleases, StudentReleases, Representative, Teacher, Section, Student } = require('../db.js');
+const { Grade, SectionReleases, ParentsReleases, StudentReleases, Representative, Teacher, Section, Student, Year } = require('../db.js');
 
 const createRelease = async (req, res, next) => {
 
@@ -11,6 +11,7 @@ const createRelease = async (req, res, next) => {
     if(!title) return res.status(400).json("Falta ingresar un titulo");
     if(!sender) return res.status(400).json("Falta especificar quien envia");
 
+    //FALTA CONDICION PARA CUANDO SEA SOLO UN CURSO
     if(sectionId){
 
       if(userRol == 3){
@@ -35,6 +36,48 @@ const createRelease = async (req, res, next) => {
         await newRelease.setSection(sectionId);
   
         return res.status(200).json("TODO OK")
+      }
+      
+      if(userRol == 1 || userRol == 5){
+
+        if(sectionId && sectionId == "all"){
+
+          const thisYear = new Date().getFullYear();
+
+          const findYear = await Year.findOne({
+            where: {
+              year: thisYear
+            }
+          })
+
+          const findSections = await Section.findAll({
+            include: [
+              {
+                model: Grade
+              }
+            ]
+          })
+
+          if(!findSections) return res.status(400).json("NO hay secciones");
+
+          const sections = findSections.filter( section => section.Grade.YearId == findYear.id);
+
+          sections.map( async section => {
+
+            const newRelease = await SectionReleases.create({
+              title,
+              sender,
+              location: filename
+            })
+
+            await newRelease.setSection(section.id)
+
+          })
+          
+          return res.status(200).json("TODO OK");
+
+        }
+
       }
 
       //TODO AQUI VA SI ES ADMIN
@@ -140,7 +183,47 @@ const searchReleases = async (req, res, next) => {
 
 }
 
+const findAllSectionReleases = async (req, res, next) => {
+
+  try{
+
+    const { year } = req.query;
+
+    const currentYear = new Date().getFullYear()
+  
+    let searchYear = year || currentYear;
+  
+    const findYear = await Year.findOne({
+      where: {
+        year: searchYear
+      }
+    })
+
+    const findSection = await SectionReleases.findAll({
+      include: [
+        {
+          model: Section,
+          include: [
+            {
+              model: Grade
+            }
+          ]
+        }
+      ]
+    })
+
+    const response = findSection.filter( section => section.Section.Grade.YearId === findYear.id)
+
+    return res.status(200).json(response);
+
+  }catch(err){
+    next(err);
+  }
+
+}
+
 module.exports = {
   createRelease,
-  searchReleases
+  searchReleases,
+  findAllSectionReleases
 }
