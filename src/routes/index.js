@@ -16,5 +16,6 @@ router.use('/uploads', require('./uploads.js'));
 router.use('/homeworks', require('./homeworks.js'));
 router.use('/releases', require('./releases.js'));
 router.use('/puppeteer', require('./reportCards.js'));
+router.use(`/sessions`, require('./sessions.js'));
 
 module.exports = router;
