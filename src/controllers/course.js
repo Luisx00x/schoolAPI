@@ -1,4 +1,4 @@
-const { Course, Section, Teacher, Grade, Schedules } = require('../db.js');
+const { Course, Section, Teacher, Grade, Schedules, Year } = require('../db.js');
 
 const createCourse = async (req, res, next) => {
 
@@ -83,6 +83,44 @@ const createCourse = async (req, res, next) => {
 
 }
 
+const getAllCourses = async (req, res, next) => {
+
+  try{
+
+    const { year } = req.query;
+
+    const setYear = year || new Date().getFullYear();
+
+    const findYear = Year.findOne({
+      where: {
+        year: setYear
+      }
+    })
+
+    const findCourses = await Course.findAll({
+      include: [
+        {
+          model: Section,
+          include: [
+            {
+              model: Grade
+            }
+          ]
+        }
+      ]
+    })
+
+    const response = findCourses.filter( course => course.Section.Grade.YearId == findYear.id)
+
+    return res.status(200).json(findCourses)
+
+  }catch(err){
+    next(err);
+  }
+
+}
+
 module.exports = {
-  createCourse
+  createCourse,
+  getAllCourses
 }

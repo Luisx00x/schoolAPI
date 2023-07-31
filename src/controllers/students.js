@@ -113,7 +113,16 @@ const searchSectionStudents = async (req, res, next) => {
 
 }
 
+const findAllStudents = async (req, res, next) => {
+
+  const searchStudents = await Student.findAll();
+
+  return res.status(200).json(searchStudents);
+
+}
+
 module.exports = {
   assignStudents,
-  searchSectionStudents
+  searchSectionStudents,
+  findAllStudents
 }

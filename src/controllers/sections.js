@@ -1,4 +1,4 @@
-const { Course, Section, Year, Grade } = require('../db.js');
+const { Course, Section, Year, Grade, Student } = require('../db.js');
 
 const findAllSections = async (req, res, next) => {
 
@@ -23,6 +23,9 @@ const findAllSections = async (req, res, next) => {
       },
       {
         model: Course
+      },
+      {
+        model: Student
       }
     ]
   })
