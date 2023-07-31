@@ -77,10 +77,27 @@ const createRelease = async (req, res, next) => {
           return res.status(200).json("TODO OK");
 
         }
+        
+        //CUANDO SE ES ADMIN Y SOLO SE MANDA A UNA SECCION
+        if(sectionId){
+  
+          const findSection = await Section.findByPk(sectionId)
+          
+          if(!findSection) return res.status(400).json("Error: Falta la sección");
+
+          const newRelease = await SectionReleases.create({
+            title,
+            sender,
+            location: filename
+          });
+
+          await newRelease.setSection(findSection.id);
+
+          return res.status(200).json("TODO OK");
+
+        }
 
       }
-
-      //TODO AQUI VA SI ES ADMIN
 
     }
 
@@ -105,6 +122,30 @@ const createRelease = async (req, res, next) => {
         const newRelease = await ParentsReleases.create({
           title,
           sender: senderValue,
+          studentId: studentId,
+          location: filename
+        })
+  
+        //Conexion con sectionID para hacer las queries
+        await newRelease.setRepresentative(findParent.DNI);
+  
+        return res.status(200).json("TODO OK")
+
+      }
+
+      if(userRol == 1 || userRol == 5){
+
+        const searchStudent= await Student.findByPk(studentId);
+  
+        if(!searchStudent) return res.status(400).json("No existe el estudiante buscado");
+
+        const findParent = await Representative.findByPk(searchStudent.RepresentativeDNI);
+
+        if(!findParent) return res.status(400).json("El apoderado no existe");
+  
+        const newRelease = await ParentsReleases.create({
+          title,
+          sender,
           studentId: studentId,
           location: filename
         })
@@ -144,6 +185,25 @@ const createRelease = async (req, res, next) => {
         return res.status(200).json("TODO OK")
       }
 
+      if(userRol == 1 || userRol == 5){
+
+        const searchSection = await Student.findByPk(studentId);
+  
+        if(!searchSection) return res.status(400).json("No existe esa sección");
+  
+        const newRelease = await StudentReleases.create({
+          title,
+          sender,
+          location: filename
+        })
+  
+        //Conexion con sectionID para hacer las queries
+        await newRelease.setStudent(studentId);
+  
+        return res.status(200).json("TODO OK")
+
+      }
+
     }
 
     if(courseId){
@@ -172,9 +232,28 @@ const createRelease = async (req, res, next) => {
         return res.status(200).json("TODO OK")
 
       }
+
+      if(userRol == 1 || userRol == 5){
+        
+        const findCourse= await Course.findByPk(courseId);
+  
+        if(!findCourse) return res.status(400).json("No existe el curso");
+  
+  
+        const newRelease = await CourseReleases.create({
+          title,
+          sender,
+          location: filename
+        })
+  
+        //Conexion con sectionID para hacer las queries
+        await newRelease.setCourse(courseId);
+  
+        return res.status(200).json("TODO OK")
+
+      }
+
     }
-    
-    if(!sectionId) return res.status(400).json("Falta la sección destino");
 
     //Si el enviante es un profesro
 
