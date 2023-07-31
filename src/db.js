@@ -60,7 +60,8 @@ const {
   Parents,
   StudentReleases,
   ParentsReleases,
-  SectionReleases
+  SectionReleases,
+  CourseReleases
   } = sequelize.models;
 
 //* Relaciones
@@ -178,6 +179,10 @@ ParentsReleases.belongsTo(Representative);
 //Notificaciones para secciones
 Section.hasMany(SectionReleases);
 SectionReleases.belongsTo(Section);
+
+//NOtificaciones para cursos
+Course.hasMany(CourseReleases);
+CourseReleases.belongsTo(Course);
 
 module.exports = {
   ...sequelize.models,

@@ -1,10 +1,10 @@
-const { Grade, SectionReleases, ParentsReleases, StudentReleases, Representative, Teacher, Section, Student, Year } = require('../db.js');
+const { Grade, Course, SectionReleases, ParentsReleases, CourseReleases, StudentReleases, Representative, Teacher, Section, Student, Year } = require('../db.js');
 
 const createRelease = async (req, res, next) => {
 
   try{
 
-    const { userRol, sender, title, sectionId, studentId, representative } = req.body;
+    const { userRol, sender, title, sectionId, courseId, studentId, representative } = req.body;
     const {filename} = req.file;
 
     if(!userRol) return res.status(400).json("El solicitante no es un usuario");
@@ -144,6 +144,34 @@ const createRelease = async (req, res, next) => {
         return res.status(200).json("TODO OK")
       }
 
+    }
+
+    if(courseId){
+
+      if(userRol == 3){
+
+        const teacherInfo = await Teacher.findByPk(sender);
+
+        if(!teacherInfo) return res.status(400).json("No hay registros de ese profesor");
+  
+        const findCourse= await Course.findByPk(courseId);
+  
+        if(!findCourse) return res.status(400).json("No existe el curso");
+  
+        const senderValue = `${teacherInfo.name} ${teacherInfo.lastName}`;
+  
+        const newRelease = await CourseReleases.create({
+          title,
+          sender: senderValue,
+          location: filename
+        })
+  
+        //Conexion con sectionID para hacer las queries
+        await newRelease.setCourse(courseId);
+  
+        return res.status(200).json("TODO OK")
+
+      }
     }
     
     if(!sectionId) return res.status(400).json("Falta la sección destino");
