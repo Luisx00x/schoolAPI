@@ -1,4 +1,4 @@
-const { CourseReleases, Course } = require('../db.js');
+const { CourseReleases, Course, Year, Section, Grade } = require('../db.js');
 
 const getTeacherCourses = async (req, res, next) => {
 
@@ -17,6 +17,43 @@ const getTeacherCourses = async (req, res, next) => {
 
 }
 
+const getAllCoursesReleases = async (req, res, next) => {
+
+    const { year } = req.query
+
+    const setYear = year || new Date().getFullYear();
+
+    const findYear = await Year.findOne({
+      while: {
+        year: setYear
+      }
+    })
+
+    const findReleases = await CourseReleases.findAll({
+      include: [
+        {
+          model: Course,
+          include: [
+            {
+              model: Section,
+              include: [
+                {
+                  model: Grade
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    })
+
+    const response = findReleases.filter( release => release.Course.Section.Grade.YearId == findYear.id)
+
+    return res.status(200).json(response)
+
+}
+
 module.exports = {
-  getTeacherCourses
+  getTeacherCourses,
+  getAllCoursesReleases
 }
