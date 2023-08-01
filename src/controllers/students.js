@@ -141,6 +141,10 @@ const findStudentSection = async (req, res, next) => {
     }
   })
 
+  const comproveUser = await User.findByPk(userId);
+
+  if(comproveUser.RolId != 2) return res.status(400).json("El usuario no es un estudiante");
+
   const findUser = await User.findByPk(userId,{
     include:[
       {
