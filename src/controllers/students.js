@@ -167,9 +167,32 @@ const findStudentSection = async (req, res, next) => {
 
 }
 
+const findStudentInfo = async (req, res, next) => {
+
+  const { userId, year } = req.query;
+
+  if(!userId) return res.status(400).json("Falta el estudiante");
+
+  const setYear = year || new Date().getFullYear();
+
+  const findUser = await User.findByPk(userId,{
+    include: [
+      {
+        model: Student
+      }
+    ]
+  })
+
+  const studentInfo = findUser.Student;
+
+  return res.status(200).json(studentInfo)
+
+}
+
 module.exports = {
   assignStudents,
   searchSectionStudents,
   findAllStudents,
-  findStudentSection
+  findStudentSection,
+  findStudentInfo
 }
