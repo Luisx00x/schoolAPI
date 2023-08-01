@@ -10,6 +10,7 @@ router.use('/', require('./course.js'));
 router.use('/', require('./academyYear.js'));
 router.use('/', require('./students.js'));
 router.use('/', require('./sections.js'));
+router.use('/schedules', require('./schedules.js'));
 router.use('/teacher', require('./teacher.js'));
 router.use('/parents', require('./parents.js'));
 router.use('/queries', require('./searchQueries.js'));
