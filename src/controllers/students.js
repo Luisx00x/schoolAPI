@@ -1,4 +1,4 @@
-const { Grade, Section, Student, Year, Course, Absences, Califications } = require('../db.js');
+const { Grade, Section, Student, Year, Course, Absences, Califications, User } = require('../db.js');
 
 const assignStudents = async (req, res, next) => {
 
@@ -115,14 +115,61 @@ const searchSectionStudents = async (req, res, next) => {
 
 const findAllStudents = async (req, res, next) => {
 
-  const searchStudents = await Student.findAll();
+  try{
 
-  return res.status(200).json(searchStudents);
+    const searchStudents = await Student.findAll();
+  
+    return res.status(200).json(searchStudents);
+    
+  }catch(err){
+    next(err);
+  }
+
+}
+
+const findStudentSection = async (req, res, next) => {
+
+  const { userId, year } = req.query;
+
+  if(!userId) return res.status(400).json("Falta el estudiante");
+
+  const setYear = year || new Date().getFullYear();
+
+  const findYear = await Year.findOne({
+    where:{
+      year: setYear
+    }
+  })
+
+  const findUser = await User.findByPk(userId,{
+    include:[
+      {
+        model: Student,
+        include: [
+          {
+            model: Section,
+            include: [
+              {
+                model: Grade
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  });
+
+  if(!findUser) return res.status(400).json("NO existe el usuario");
+
+  const response = findUser.Student.Sections.find( section => section.Grade.YearId == findYear.id);
+
+  return res.status(200).json(response);
 
 }
 
 module.exports = {
   assignStudents,
   searchSectionStudents,
-  findAllStudents
+  findAllStudents,
+  findStudentSection
 }
