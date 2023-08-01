@@ -193,10 +193,119 @@ const findStudentInfo = async (req, res, next) => {
 
 }
 
+const findCalifications = async (req, res, next) => {
+
+  try{
+
+      const { sectionId, studentId } = req.query;
+
+      if(!sectionId) return res.status(400).json("Se requiere una sección");
+      if(!studentId) return res.status(400).json("Se requiere un estudiante");
+
+      const findSection = await Section.findByPk(sectionId);
+
+      if(!findSection) return res.status(400).json("No existe la sección");
+
+      const findStudent = await Student.findByPk(studentId);
+      if(!findStudent) return res.status(400).json("No existe el estudiante");
+
+      const findCourses = await Course.findAll({
+        where: {
+          SectionId: findSection.id
+        },
+        include: [
+          {
+            model: Califications
+          }
+        ]
+      })
+
+      const studentCalifications = findCourses.map( (course, index) => { 
+        return {
+          id: course.id,
+          course: course.courseName,
+          skills: course.skills,
+          califications: course.Califications.filter( calification => calification.StudentId == findStudent.id)
+          }
+        }) 
+          //IDEA: MAPEAR DENTRO DEL FILTER PARA RETORNAR ORDENADAS LAS CAL
+          
+      const formatCalif = [];
+      const proms = [];
+
+      const test = studentCalifications.forEach( (course,index1) => {
+        let data = []
+        let prom = {}
+
+        course.skills.forEach( (skill, index) => {
+          let calif = {
+            skill: skill
+          }
+          course.califications.forEach( (calification) => {
+            prom = {...prom, [`prom${index+1}`]: calification[`prom${index+1}`] }
+            calif = {
+              ...calif,
+              cal1: calification.B1[index],
+              cal2: calification.B2[index],
+              cal3: calification.B3[index],
+              cal4: calification.B4[index],
+            }
+          })
+
+          data.push(calif)
+        })
+        formatCalif.push(data)
+        proms.push(prom)
+      })
+
+    const response = studentCalifications.map( (course, index) => {
+      return {
+        id: course.id,
+        course: course.course,
+        skills: formatCalif[index],
+        proms: proms[index]
+      }
+    })
+     /*  {
+        id:1, 
+        course: "Matematica", 
+        skills: [
+          {
+            skill: "Competencia1",
+            cal1: "A", => calificacion de B1 para C1
+            cal2: "A", => calificacion de B2 para C1
+            cal3: "B",  => calficiacion de B3 para C1
+            cal4: "A" => calificacion de B4 para C1
+          },
+          {
+            skill: "Competencia2",
+            cal1: "A",
+            cal2: "A",
+            cal3: "A",
+            cal4: "A"
+          },
+          {
+            skill: "Competencia3",
+            cal1: "B",
+            cal2: "A",
+            cal3: "C",
+            cal4: "D"
+          }
+        ]
+      } */
+
+      return res.status(200).json(response);
+
+  }catch(err){
+    next(err);
+  }
+}
+
 module.exports = {
   assignStudents,
   searchSectionStudents,
   findAllStudents,
   findStudentSection,
-  findStudentInfo
+  findStudentInfo,
+  findCalifications
 }
