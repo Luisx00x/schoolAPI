@@ -344,7 +344,13 @@ const getAllStudentReleases = async (req, res, next) => {
     const findCoursesReleases = await CourseReleases.findAll({
       where: {
         CourseId: coursesId
-      }
+      },
+      include: [
+        {
+          model: Course,
+          attributes: ["courseName"]
+        }
+      ]
     })
 
     const response = {
