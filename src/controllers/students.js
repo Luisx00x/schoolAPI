@@ -367,6 +367,41 @@ const getAllStudentReleases = async (req, res, next) => {
   }
 }
 
+const findStudentCourses = async (req, res, next) => {
+
+  try{
+
+    const { sectionId } = req.query;
+
+    if(!sectionId) return res.status(400).json("Se requiere una sección para obtener los cursos")
+
+    const findSection = await Section.findByPk(sectionId,{
+      include: [
+        {
+          model: Course,
+          include: [
+            {
+              model: Section,
+              include: [
+                {
+                  model: Grade
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+
+    if(!findSection) return res.status(400).json("No existe la sección");
+
+    return res.status(200).json(findSection.Courses)
+
+  }catch(err){
+    next(err)
+  }
+}
+
 module.exports = {
   assignStudents,
   searchSectionStudents,
@@ -374,5 +409,6 @@ module.exports = {
   findStudentSection,
   findStudentInfo,
   findCalifications,
-  getAllStudentReleases
+  getAllStudentReleases,
+  findStudentCourses
 }
