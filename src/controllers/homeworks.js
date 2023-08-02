@@ -50,11 +50,7 @@ const getHomeworks = async (req, res, next) => {
     if(!courseId) return res.status(400).json("No hay curso para buscar");
     if(!teacherId) return res.status(400).json("No hay profesor para buscar");
     if(!rol) return res.status(400).json("No se ha ingresado un rol");
-    if(rol != 5){
-      if(rol != 3){
-        if(rol !=1) return res.status(404).json("No tienes autorización")
-      }
-    }
+    if(rol < 1 && rol > 5) return res.status(404).json("No tienes autorización")
 
     const searchHomeworks = await Homework.findAll({
       where: {
