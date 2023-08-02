@@ -1,4 +1,4 @@
-const { Grade, Section, Student, Year, Course, Absences, Califications, User } = require('../db.js');
+const { Grade, Section, Student, Year, Course, Absences, Califications, User, Representative, StudentReleases, ParentsReleases, SectionReleases, CourseReleases } = require('../db.js');
 
 const assignStudents = async (req, res, next) => {
 
@@ -266,35 +266,95 @@ const findCalifications = async (req, res, next) => {
         proms: proms[index]
       }
     })
-     /*  {
-        id:1, 
-        course: "Matematica", 
-        skills: [
-          {
-            skill: "Competencia1",
-            cal1: "A", => calificacion de B1 para C1
-            cal2: "A", => calificacion de B2 para C1
-            cal3: "B",  => calficiacion de B3 para C1
-            cal4: "A" => calificacion de B4 para C1
-          },
-          {
-            skill: "Competencia2",
-            cal1: "A",
-            cal2: "A",
-            cal3: "A",
-            cal4: "A"
-          },
-          {
-            skill: "Competencia3",
-            cal1: "B",
-            cal2: "A",
-            cal3: "C",
-            cal4: "D"
-          }
-        ]
-      } */
 
       return res.status(200).json(response);
+
+  }catch(err){
+    next(err);
+  }
+}
+
+const getAllStudentReleases = async (req, res, next) => {
+
+  try{
+
+    const { studentId, sectionId } = req.query;
+
+    //TODO NECESITO OBTENER TODAS LAS RELEASES DE STUDENT, PARENTS POR STUDENT ID Y TODAS LAS DE SECTION Y COURSE POR SECTIONID
+
+    if(!studentId) return res.status(400).json("Se require un estudiante");
+    if(!sectionId) return res.status(400).json("Se requirer una sección");
+
+    const findStudent = await Student.findByPk(studentId);
+
+    if(!findStudent) return res.status(400).json("No hay registros del estudiante");
+
+    const findSection = await Section.findByPk(sectionId);
+
+    if(!sectionId) return res.status(400).json("No existe la sección buscada");
+
+    //* Consiguiento las releases de student
+
+    //? Listo
+    const findStudentReleases = await StudentReleases.findAll({
+      where: {
+        StudentId: studentId
+      }
+    })
+
+    //* Consiguiento los releases de representative
+
+    const findParent = await Representative.findAll({
+      include: [
+        {
+          model: Student
+        }
+      ]
+    })
+
+    const parentDNI = findParent.find( parent => parent.Students.find( student => student.id == findStudent.id))
+
+    //? Listo
+    const findParentsReleases = await ParentsReleases.findAll({
+      where: {
+        RepresentativeDNI: parentDNI.DNI
+      }
+    })
+
+    //* Consiguiendo las releases de section
+
+    //? Listo
+    const findSectionReleases = await SectionReleases.findAll({
+      where: {
+        SectionId: sectionId
+      }
+    })
+
+    //* Consiguiendo las releases de course
+    
+    const courses = await Course.findAll({
+      where: {
+        SectionId: sectionId
+      },
+      attributes: ["id"]
+    })
+
+    const coursesId = courses.map( course => course.id)
+
+    const findCoursesReleases = await CourseReleases.findAll({
+      where: {
+        CourseId: coursesId
+      }
+    })
+
+    const response = {
+      student: [...findStudentReleases],
+      representative: [...findParentsReleases],
+      section: [...findSectionReleases],
+      courses: [...findCoursesReleases]
+    }
+
+    return res.status(200).json(response);
 
   }catch(err){
     next(err);
@@ -307,5 +367,6 @@ module.exports = {
   findAllStudents,
   findStudentSection,
   findStudentInfo,
-  findCalifications
+  findCalifications,
+  getAllStudentReleases
 }
