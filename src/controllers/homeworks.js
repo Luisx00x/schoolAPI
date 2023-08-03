@@ -1,4 +1,4 @@
-const { Homework } = require('../db.js');
+const { Homework, HomeworksAnswer, Student, Course, Section } = require('../db.js');
 
 const uploadHomework = async (req, res, next) => {
   
@@ -14,16 +14,41 @@ const uploadHomework = async (req, res, next) => {
     if(!teacherId) return res.status(400).json("Falta un profesor");
     if(!courseId) return res.status(400).json("Falta un curso");
 
+    const findCourse = await Course.findByPk(courseId,{
+      include: [
+        {
+          model: Section,
+          include: [
+            {
+              model: Student,
+              attributes: ["id"]
+            }
+          ]
+        }
+      ]
+    });
+    
+    if(!findCourse) return res.status(400).json("No existe el curso");
+    
+    const students = findCourse.Section.Students;
+
     const newHomework = await Homework.create({
       asignation: title,
       location: filename
     });
+   
+   
+     await newHomework.setTeacher(teacherId);
+   await newHomework.setCourse(courseId);
+  
+    await students.forEach( async student => {
+      const newAnwser = await HomeworksAnswer.create()
 
-    await newHomework.setTeacher(teacherId);
-    await newHomework.setCourse(courseId);
+      newAnwser.setHomework(newHomework.id);
+      newAnwser.setStudent(student.id)
+    })
 
-
-    res.status(200).json("TODO OK");
+    res.status(200).json(students);
     next()
  
   }catch(err){
@@ -70,8 +95,59 @@ const getHomeworks = async (req, res, next) => {
 
 }
 
+const uploadAnswer = async (req, res, next) => {
+
+  try{
+
+    const { filename } = req.file;
+
+    const { studentId, homeworkId } = req.body;
+
+    if(!studentId) return res.status(400).json("Falta el id del estudiante");
+    if(!homeworkId) return res.status(400).json("Falta el id del homework");
+
+    const findStudent = Student.findByPk(studentId);
+
+    if(!findStudent) return res.status(400).json("NO existe el estudiante");
+
+    const findHomework = await Homework.findByPk(homeworkId);
+    
+    if(!findHomework) return res.status(400).json("NO existe esa tarea");
+
+    const answerPlace = await HomeworksAnswer.findAll()
+
+    /* const newAnswer = await HomeworksAnswer.create({
+      location: filename
+    }) */
+
+   /*  await newAnswer.setStudent(findStudent.id);
+    await newAnswer.setHomework(findHomework.id); */
+
+    return res.status(200).json(answerPlace);
+
+  }catch(err){
+    next(err);
+  }
+}
+
+const getAnswers = async (req, res, next) => {
+
+  try{
+
+    const findAnswers = await HomeworksAnswer.findAll()
+
+    return res.status(200).json(findAnswers)
+
+  }catch(err){
+    next(err);
+  }
+
+}
+
 
 module.exports = {
   uploadHomework,
-  getHomeworks
+  getHomeworks,
+  uploadAnswer,
+  getAnswers
 }

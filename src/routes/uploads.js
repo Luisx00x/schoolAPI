@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { uploadHomework } = require('../controllers/homeworks');
+const { uploadHomework, uploadAnswer } = require('../controllers/homeworks');
 const multer = require('multer');
 const { uploadClasses } = require('../controllers/classes');
 const { createRelease } = require('../controllers/SectionReleases');
@@ -23,6 +23,23 @@ const homeworkStorage = multer.diskStorage({
 const homeworksMiddle = multer({storage: homeworkStorage})
 
 router.post('/homeworks', homeworksMiddle.single('newHomework'), uploadHomework);
+
+//Subida para respuestas
+/* const answersStorage = multer.diskStorage({
+  filename: function(res, file, cb){
+    const filename = file.originalname.split('.');
+    const ext = filename.pop();
+    const date = Date.now();
+    cb(null, `${filename}_${date}.${ext}`);
+  },
+  destination: function (res, file, cb){
+    cb(null, `./public/homeworkAnswer`);
+  }
+});
+
+const answersMiddle = multer({storage: home}) */
+
+router.post(`/homeworkAnswer`, homeworksMiddle.single(`newAnswer`), uploadAnswer)
 
 //Subida de clases
 const classesStorage = multer.diskStorage({
