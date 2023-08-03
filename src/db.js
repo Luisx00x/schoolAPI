@@ -190,8 +190,8 @@ CourseReleases.belongsTo(Course);
 User.hasOne(Tutor);
 Tutor.belongsTo(User);
 
-Section.hasOne(Tutor);
-Tutor.belongsTo(Section);
+Tutor.hasMany(Section);
+Section.belongsTo(Tutor);
 
 //Repuesta de tareas
 Homework.hasMany(HomeworksAnswer);
