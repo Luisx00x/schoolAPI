@@ -61,7 +61,9 @@ const {
   StudentReleases,
   ParentsReleases,
   SectionReleases,
-  CourseReleases
+  CourseReleases,
+  HomeworksAnswer,
+  Tutor
   } = sequelize.models;
 
 //* Relaciones
@@ -183,6 +185,20 @@ SectionReleases.belongsTo(Section);
 //NOtificaciones para cursos
 Course.hasMany(CourseReleases);
 CourseReleases.belongsTo(Course);
+
+//Tutor
+User.hasOne(Tutor);
+Tutor.belongsTo(User);
+
+Section.hasOne(Tutor);
+Tutor.belongsTo(Section);
+
+//Repuesta de tareas
+Homework.hasMany(HomeworksAnswer);
+HomeworksAnswer.belongsTo(Homework);
+
+Student.hasOne(HomeworksAnswer);
+HomeworksAnswer.belongsTo(Student);
 
 module.exports = {
   ...sequelize.models,
