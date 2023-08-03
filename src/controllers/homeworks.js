@@ -48,8 +48,7 @@ const uploadHomework = async (req, res, next) => {
       newAnwser.setStudent(student.id)
     })
 
-    res.status(200).json(students);
-    next()
+    return res.status(200).json("La tarea se ha subido correctamente");
  
   }catch(err){
     console.error(err);
