@@ -23,7 +23,7 @@ const uploadClasses = async (req, res, next) => {
     await newClass.setCourse(courseId);
 
 
-    res.status(200).json("TODO OK");
+    res.status(200).json("La sesión se ha subido correctamente.");
     next()
 
   }catch(err){
