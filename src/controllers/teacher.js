@@ -55,6 +55,8 @@ const searchAbsences = async (req, res, next) => {
 
     const { courseId } = req.query;
 
+    if(!courseId) return res.status(400).json("Falta un curso");
+
     const searchAbsences = await Absences.findAll({
       where: {
         CourseId: courseId
@@ -163,9 +165,34 @@ const registerCalifications = async (req, res, next) => {
 
 }
 
+const searchCalifications = async (req, res, next) => {
+  
+  try{
+
+    const { courseId } = req.query;
+    
+    if(!courseId) return res.status(400).json("No hay un curso");
+
+    const findCourse = await Course.findByPk(courseId, {
+      include: [
+        {
+          model: Califications
+        }
+      ]
+    })
+
+    return res.status(200).json(findCourse.Califications)
+
+  }catch(err){
+    next(err);
+  }
+
+}
+
 module.exports = {
   searchTeacherCourses,
   addAbsences,
   registerCalifications,
-  searchAbsences
+  searchAbsences,
+  searchCalifications
 }
