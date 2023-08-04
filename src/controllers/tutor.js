@@ -1,4 +1,4 @@
-const { Tutor, User, Section, Course, Grade, Year, Absences, Student } = require('../db.js');
+const { Tutor, User, Section, Course, Grade, Year, Absences, Student, Attendance } = require('../db.js');
 
 const tutorSection = async (req, res, next) => {
 
@@ -111,7 +111,50 @@ const allStudentAbsences = async (req, res, next) => {
   }
 }
 
+const findAttendanse = async (req, res, next) => {
+
+  try{
+
+    const { students, sectionId } = req.body;
+  
+    if(!students) return res.status(400).json("Faltan los estudiantes");
+    if(!sectionId) return res.status(400).json("Falta la seccion");
+
+    const studentSearch = students.map( student => student.id)
+
+    const findStudent = await Student.findAll({
+      where: {
+        id: studentSearch
+      }
+    })
+
+    if(!findStudent || findStudent.length < 1) return res.status(400).json("No existen los estudiantes");
+
+    const findSection = await Section.findByPk(sectionId);
+    if(!findSection) return res.status(400).json("No existe la sección");
+
+    const studentsId = findStudent.map( student => student.id)
+
+    const findAttendanse = await Attendance.findAll({
+      where: {
+        SectionId: sectionId,
+        StudentId: studentsId
+      }
+    })
+
+    if(!findAttendanse || findAttendanse.length < 1) return res.status(400).json("No hay notas de asistencia");
+
+    return res.status(200).json(findAttendanse)
+
+  }catch(err){
+    next(err)
+  }
+
+}
+
+
 module.exports = {
   tutorSection,
-  allStudentAbsences
+  allStudentAbsences,
+  findAttendanse
 }
