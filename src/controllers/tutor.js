@@ -152,9 +152,51 @@ const findAttendanse = async (req, res, next) => {
 
 }
 
+const receibeAttendances = async (req, res, next) => {
+
+  console.log(req.body)
+
+  try{
+
+    const { attendanceId, justifiedFault, absences, delays } = req.body;
+  
+    if(!attendanceId) return res.status(400).json("Se necesita un registro de Asistencia");
+    
+    if(!justifiedFault || typeof justifiedFault !== "object" || justifiedFault.length < 4) {
+      return res.status(400).json("Valor de faltas justificadsa inválido");
+    }
+    
+    if(!absences || typeof absences !== "object" || absences.length < 4) {
+      return res.status(400).json("Valor de faltas injustificadas inválido");
+    }
+
+    if(!delays || typeof delays !== "object" || delays.length < 4) {
+      return res.status(400).json("Valor de tardanzas inválido");
+    }
+    
+    const findAttendanse = await Attendance.findByPk(attendanceId);
+
+    if(!findAttendanse) return res.status(400).json("No se encuentra el registro de Asistencias");
+
+    await findAttendanse.update({
+      justifiedFault,
+      absences,
+      delays
+    })
+
+    return res.status(200).json(findAttendanse);
+
+  }catch(err){
+    console.log(err)
+    next(err);
+  }
+
+}
+
 
 module.exports = {
   tutorSection,
   allStudentAbsences,
-  findAttendanse
+  findAttendanse,
+  receibeAttendances
 }
