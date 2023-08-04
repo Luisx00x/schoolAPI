@@ -1,4 +1,4 @@
-const { Grade, Section, Student, Year, Course, Absences, Califications, User, Representative, StudentReleases, ParentsReleases, SectionReleases, CourseReleases } = require('../db.js');
+const { Grade, Section, Student, Year, Course, Absences, Califications, User, Representative, Attendance, StudentReleases, ParentsReleases, SectionReleases, CourseReleases } = require('../db.js');
 
 const assignStudents = async (req, res, next) => {
 
@@ -65,24 +65,33 @@ const assignStudents = async (req, res, next) => {
       const findCourse = await Course.findByPk(course.id);
 
       const createCalification = await Califications.create();
-
+      
       if(!findCourse) return res.status(400).json("No hay curso");
-
+      
       await createCalification.setStudent(findStudent.id);
       await createCalification.setCourse(findCourse.id);
       
       let calif = [];
-
+      
       for(let i = 0; i < findCourse.skills.length; i++){
         calif.push(" ");
       }
-
+      
       await createCalification.update({B1: calif, B2: calif, B3: calif, B4: calif });
-
+      
+      
+      
       await absencesAsignance.setCourse(findCourse.id);
-
       await absencesAsignance.setStudent(findStudent.id);
     })
+    
+    const createAttendance = await Attendance.create();
+    await createAttendance.setStudent(findStudent.id);
+    await createAttendance.setSection(sectionId);
+
+    let attent = [" ", " ", " ", " "];
+
+    await createAttendance.update({ absences: attent, justifiedFault: attent, delays: attent });
 
     await sectionSelected.addStudents(findStudent.id);
 
