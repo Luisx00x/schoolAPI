@@ -1,5 +1,6 @@
-const { Year, Grade, Section } = require('../db.js');
-const { gradeAssignment } = require('../helpers/academyYearHandlers.js');
+const { Op } = require('sequelize');
+const { Year, Grade, Section, Representative, Student, Parents } = require('../db.js');
+const { gradeAssignment, formatParentsData } = require('../helpers/academyYearHandlers.js');
 
 const newYearController = async (req, res, next) => {
 
@@ -59,6 +60,79 @@ const newYearController = async (req, res, next) => {
 
 }
 
+const verifyStudent = async (req, res, next) => {
+
+  try{
+
+    const { studentDNI, fatherDNI, motherDNI } = req.query;
+
+    if(!fatherDNI && !motherDNI) return res.status(400).json("No se ha introducido información de un apoderado");
+
+    
+    if(fatherDNI) {
+      
+      const findFather = await Student.findOne({
+        where: {
+          RepresentativeDNI: fatherDNI,
+          DNI: studentDNI
+        },
+        include: [
+          {
+            model: Representative
+          },
+          {
+            model: Parents
+          }
+        ]
+      })
+      
+      if(findFather) {
+       
+        const response = formatParentsData(findFather, "father");
+        
+        return res.status(200).json({payload: response})
+      
+      }
+      
+    }
+    
+    if(motherDNI){
+      
+      const findMother = await Student.findOne({
+        where: {
+          DNI: studentDNI,
+          RepresentativeDNI: motherDNI
+        },
+        include: [
+          {
+            model: Representative
+          },
+          {
+            model: Parents
+          }
+        ]
+      })
+
+      if(findMother){
+
+        const response = formatParentsData(findMother, "mother");
+        
+        return res.status(200).json({payload: response});
+
+      }
+
+      
+    }
+    
+    return res.status(200).json({msg: "Ingrese los datos del nuevo estudiante"});
+
+  }catch(err){
+    next(err);
+  }
+
+}
+
 module.exports = {
-  newYearController
+  newYearController,
+  verifyStudent
 }
