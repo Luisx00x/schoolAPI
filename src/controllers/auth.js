@@ -167,6 +167,10 @@ const registerController = async (req, res, next) => {
 
       if(parseInt(userRol) === 3){
 
+        const { DNI } = req.body;
+        
+        if(!DNI) return res.status(400).json("Falta el DNI del profesor");
+
         const searchTeacher = await Teacher.findOne({
           where: {
             email: email
@@ -179,7 +183,7 @@ const registerController = async (req, res, next) => {
         
         else{
 
-          const newTeacher = await createObject(Teacher, {name: names, lastName: teacherLastNames, email});
+          const newTeacher = await createObject(Teacher, {DNI: DNI, name: names, lastName: teacherLastNames, email});
 
           const newUser = await createUser(names, teacherLastNames, newTeacher.id);
 
