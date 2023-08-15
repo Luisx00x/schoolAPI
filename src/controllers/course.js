@@ -21,7 +21,46 @@ const createCourse = async (req, res, next) => {
     if(!sectionId) return res.status(400).json("No se ha especificado una sección");
     if(days.length < 1) return res.status(400).json("Se tiene que establecer al menos un dia para el curso");
     if(skills.length < 1) return res.status(400).json("Debe haber al menos una competencia");
-    if(Abbrev.length < skills.length) return res.status(400).json("Faltan abreviaciones de las competencias");
+    if(Abbrev.length < 1) return res.status(400).json("Faltan abreviaciones de las competencias");
+
+    let nameIncomplete = false;
+    let nameIsEmpty = false;
+
+    for(let skill of skills) {
+      
+      if(skill == false){
+        nameIncomplete = true;
+        break;
+      }
+      if(skill.charCodeAt() == 32) {
+        nameIsEmpty = true;
+        break;
+      }
+      
+    }
+
+    if(nameIncomplete) return res.status(400).json("Faltan nombres de una o más competencias");
+    if(nameIsEmpty) return res.status(400).json("Una competencia no puede estar en blanco o empezar con espacio");
+
+    nameIncomplete = false;
+    nameIsEmpty = false;
+
+    for(let abb of Abbrev) {
+
+      if(abb == false) {
+        nameIncomplete = true;
+        break;
+      }
+
+      if(abb.charCodeAt() == 32) {
+        nameIsEmpty = true;
+        break;
+      }
+
+    }
+    
+    if(nameIncomplete) return res.status(400).json("Falta abreviatura de una o más competencias");
+    if(nameIsEmpty) return res.status(400).json("Una abreviatura no puede estar en blanco o empezar con espacio");
 
     const searchCourse = await Course.findAll({
       where: {
@@ -44,9 +83,9 @@ const createCourse = async (req, res, next) => {
 
     
     //* REQUIERE UNA SECCIÓN PARA COMPARAR CON EL NOMBRE DEL GRADO QUE RECIBE
-    const valiadteCourse = searchCourse.find( ele => ele.Section.id === parseInt(sectionId));
-    
-    if(valiadteCourse) return res.status(200).json({msg: "El Curso ya existe", valiadteCourse});
+    const validatedCourse = searchCourse.find( ele => ele.Section.id === parseInt(sectionId));
+    console.log(validatedCourse, "****** validated");
+    if(validatedCourse) return res.status(200).json("El Curso ya existe");
 
     const createCourse = await Course.create({
       courseName,
