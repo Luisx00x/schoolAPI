@@ -25,6 +25,7 @@ const createCourse = async (req, res, next) => {
 
     let nameIncomplete = false;
     let nameIsEmpty = false;
+    let dayEmpty = false;
 
     for(let skill of skills) {
       
@@ -62,6 +63,25 @@ const createCourse = async (req, res, next) => {
     if(nameIncomplete) return res.status(400).json("Falta abreviatura de una o más competencias");
     if(nameIsEmpty) return res.status(400).json("Una abreviatura no puede estar en blanco o empezar con espacio");
 
+    for(let day of days){
+
+      if(day.day == false) {
+        dayEmpty = true;
+        break;
+      }
+      if(day.init == false){
+        dayEmpty = true;
+        break;
+      }
+      if(day.end == false){
+        dayEmpty = true;
+        break;
+      }
+
+    }
+
+    if(dayEmpty) return res.status(400).json("Uno o más días especificados no tienen todos su datos")
+
     const searchCourse = await Course.findAll({
       where: {
         courseName
@@ -84,7 +104,7 @@ const createCourse = async (req, res, next) => {
     
     //* REQUIERE UNA SECCIÓN PARA COMPARAR CON EL NOMBRE DEL GRADO QUE RECIBE
     const validatedCourse = searchCourse.find( ele => ele.Section.id === parseInt(sectionId));
-    console.log(validatedCourse, "****** validated");
+
     if(validatedCourse) return res.status(200).json("El Curso ya existe");
 
     const createCourse = await Course.create({
