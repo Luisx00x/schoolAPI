@@ -14,6 +14,23 @@ conn.sync({force: false})
     console.log(`%listening at port ${port}`)
   })
 })
+.then( () => {
+
+  ( async function () {
+    
+    rols.map( async ele => {
+      const findEle = await Rols.findOne({
+        where: {
+          name: ele.name
+        }
+      })
+
+      if(!findEle) await Rols.create(ele)
+    })
+  
+  }())
+
+})
 
 /* .then( () => {
 
@@ -33,15 +50,8 @@ conn.sync({force: false})
 
 }) */
 
-/* .then( () => {
 
-  ( async function () {
-    
-    rols.map( async ele => await Rols.create(ele))
-  
-  }())
-
-})
+/* 
 
 .then( () => {
   ( async function () {
@@ -174,6 +184,7 @@ conn.sync({force: false})
 
 })
   */
+
 /* .then( () => {
   
   (async function () {
@@ -199,6 +210,7 @@ conn.sync({force: false})
 
 })
  */
+
 /*  .then( () => {
   
   (async function () {
@@ -206,7 +218,7 @@ conn.sync({force: false})
     const tutor = await Tutor.findByPk(234561123)
   
     await tutor.addSections(1);
-    await tutor.addSections(2)
+    //await tutor.addSections(2);
   }())
 
 }) 
