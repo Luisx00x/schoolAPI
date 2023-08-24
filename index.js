@@ -1,7 +1,7 @@
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 //MOCK
-const { User, Rols, Student, Representative, Administration, Teacher, Course, Year, Grade, Section, Homework, Calification, Absences } = require('./src/db.js');
+const { User, Rols, Attendance, Student, Representative, Administration, Teacher, Course, Year, Grade, Section, Homework, Calification, Absences, Tutor } = require('./src/db.js');
 const { user, rols, estudiantes, apoderados, profesores, materias} = require('./src/Mock.js');
 const { newPassword } = require('./src/helpers/setUsersHandler.js');
 //*
@@ -17,6 +17,24 @@ conn.sync({force: false})
 
 /* .then( () => {
 
+  (async function () {
+
+    const findAttendanse1 = await Attendance.findByPk(1)
+
+    await findAttendanse1.setStudent(1);
+    await findAttendanse1.setSection(1);
+
+    const findAttendanse2 = await Attendance.findByPk(2)
+
+    await findAttendanse2.setStudent(3);
+    await findAttendanse2.setSection(1);
+
+  }())
+
+}) */
+
+/* .then( () => {
+
   ( async function () {
     
     rols.map( async ele => await Rols.create(ele))
@@ -28,8 +46,8 @@ conn.sync({force: false})
 .then( () => {
   ( async function () {
 
-    const encryptedPassword = await newPassword("profe123");
-    const encryptedPassword2 = await newPassword("password");
+    const encryptedPassword = await newPassword("1234");
+    const encryptedPassword2 = await newPassword("1234");
 
     const user2 = await User.create({userName: "Ruben123", password: encryptedPassword2});
     user2.setRol(1);
@@ -40,15 +58,160 @@ conn.sync({force: false})
     const user = await User.create({userName: "Coba123", password: encryptedPassword});
     user.setRol(3);
     
-    const teacher = await Teacher.create({name: "Otro", lastName: "Coba", email: "OtroCoba@mail.com"})
+    const teacher = await Teacher.create({DNI:2134562, name: "Otro", lastName: "Coba", email: "OtroCoba@mail.com"})
     await teacher.setUser(2);
+
+    //Mock de estudiante
+
+    //? ANA
+    const encryptedPassword3 = await newPassword("1234");
+
+    const user3 = await User.create({userName: "Anabel123", password: encryptedPassword3});
+    user3.setRol(2);
+
+    const student1 = await Student.create({
+      DNI: 21329313,
+      names: "Ana Belen", 
+      fatherLastName: "Fernandez", 
+      motherLastName: "Guerra",
+      birthdate: "1992-10-08",
+      gender: "F",
+      level: "Secundaria",
+      grade: 6,
+      religion: "Catolica",
+      procedense: "otro colegio"
+    });
+    await student1.setUser(3);
+
+    const encryptedPassword4 = await newPassword("1234");
+
+    //? MARCOS
+    const user4 = await User.create({userName: "Marcas", password: encryptedPassword4});
+    user4.setRol(2);
+
+    const student2 = await Student.create({
+      DNI: 24329313,
+      names: "Marcos David", 
+      fatherLastName: "Fernandez", 
+      motherLastName: "Guerra",
+      birthdate: "1996-10-08",
+      gender: "M",
+      level: "Primaria",
+      grade: 3,
+      religion: "Catolica",
+      procedense: "otro colegio"
+    });
+    await student2.setUser(4);
+
+    //? JUAN
+    const encryptedPassword5 = await newPassword("1234");
+
+    const user5 = await User.create({userName: "Juanan", password: encryptedPassword5});
+    user5.setRol(2);
+
+    const student3 = await Student.create({
+      DNI: 21329313,
+      names: "Juan Antorio", 
+      fatherLastName: "Perez", 
+      motherLastName: "Muñoz",
+      birthdate: "1999-10-08",
+      gender: "M",
+      level: "Inicial",
+      grade: 1,
+      religion: "Cristiano",
+      procedense: "otro colegio2"
+    });
+    await student3.setUser(5);
   
+    //APODERADOS
+  
+    const encryptedPassword6 = await newPassword("1234");
+
+    const user6 = await User.create({userName: "MirGuer", password: encryptedPassword6});
+    await user6.setRol(4);
+    
+    const representative1 = await Representative.create({
+      names: "Mirian Carolina", 
+      DNI: 123456, 
+      lastNames: "Guerra", 
+      address: "Calle A, Mz-B", 
+      phone: "123456789", 
+      civilStatus: "Divorciada", 
+      celPhone: "456789123", 
+      email: "MGuerra@mail.com", 
+      workPlace: "Otro colegio", 
+      ocuppation: "Directora", 
+      RPMorRPC: ""
+    })
+
+    await representative1.setUser(6);
+    await representative1.addStudents(student1.id);
+    await representative1.addStudents(student2.id);
+
+    const encryptedPassword7 = await newPassword("1234");
+
+    const user7 = await User.create({userName: "JuanPer", password: encryptedPassword7});
+    await user7.setRol(4);
+    
+    const representative2 = await Representative.create({
+      names: "Juan Reinaldo", 
+      DNI: 234561, 
+      lastNames: "Perez Reyes", 
+      address: "Calle B, Mz-D", 
+      phone: "567894321", 
+      civilStatus: "Viudp", 
+      celPhone: "43256562", 
+      email: "JPerez@mail.com", 
+      workPlace: "Consultorio", 
+      ocuppation: "Medico", 
+      RPMorRPC: ""
+    })
+
+    await representative2.setUser(7);
+    await representative2.addStudents(student3.id);
+
   }())
 
+})
+  */
+/* .then( () => {
+  
+  (async function () {
 
+    await Rols.create({name: "Tutor"})
+
+    const encryptedPassword8 = await newPassword("1234");
+
+    const user8 = await User.create({userName: "Tutor", password: encryptedPassword8});
+    await user8.setRol(6);
+
+    const tutor1 = await Tutor.create({
+      names: "Pedro Pablo", 
+      DNI: 234561123, 
+      lastNames: "Perez Reyes", 
+      email: "JPerez@mail.com", 
+    })
+
+    await tutor1.setUser(8);
+   // await tutor1.setSection(1);
+
+  }())
 
 })
  */
+/*  .then( () => {
+  
+  (async function () {
+
+    const tutor = await Tutor.findByPk(234561123)
+  
+    await tutor.addSections(1);
+    await tutor.addSections(2)
+  }())
+
+}) 
+ */
+
 //MOCK
 /* 
 .then( () => {
