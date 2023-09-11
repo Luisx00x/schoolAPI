@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = sequelize => {
-  sequelize.define('Representative', {
+  sequelize.define('Parents', {
     DNI: {
       type: DataTypes.BIGINT,
       primaryKey: true,
@@ -49,7 +49,7 @@ module.exports = sequelize => {
     }
   },
   {
-    timestamps: true,
-    freezeTableName: true
-  });
+    freezeTableName: true,
+    timestamps: true
+  })
 }

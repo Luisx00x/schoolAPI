@@ -1,8 +1,8 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = sequelize => {
-  sequelize.define('Homework',{
-    asignation: {
+  sequelize.define('Classes', {
+    className: {
       type: DataTypes.TEXT,
       allowNull: false
     },
@@ -13,6 +13,6 @@ module.exports = sequelize => {
   },
   {
     freezeTableName: true,
-    timestamps: true
+    timestamps: false
   })
 }

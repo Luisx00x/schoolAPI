@@ -5,6 +5,14 @@ module.exports = sequelize => {
     courseName:{
       type: DataTypes.STRING,
       allowNull: false
+    },
+    skills:{
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: false
+    },
+    Abbrev:{
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: false
     }
   },
   {

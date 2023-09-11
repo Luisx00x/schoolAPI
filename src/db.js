@@ -10,16 +10,18 @@ const {
   DB_DEPLOY_PASSWORD,
   DB_DEPLOY_HOST,
   DB_DEPLOY_PORT,
-  DB_DEPLOY_NAME
+  DB_DEPLOY_NAME,
+  DB_DEPLOY_USER
 } = process.env;
 
 const PASSWORD = DB_DEPLOY_PASSWORD || DB_PASSWORD;
 const HOST = DB_DEPLOY_HOST || DB_HOST;
 const PORT = DB_DEPLOY_PORT  || '';
 const NAME = DB_DEPLOY_NAME || 'school';
+const USER = DB_DEPLOY_USER || DB_USER;
 
 const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${PASSWORD}@${HOST}:${PORT}/${NAME}`,
+  `postgres://${USER}:${PASSWORD}@${HOST}:${PORT}/${NAME}?ssl=true`,
   {
     logging: false,
     native: false
@@ -54,8 +56,17 @@ const {
   Grade,
   Section,
   Homework,
-  Calification,
-  Absences
+  Califications,
+  Absences,
+  Classes,
+  Parents,
+  StudentReleases,
+  ParentsReleases,
+  SectionReleases,
+  CourseReleases,
+  HomeworksAnswer,
+  Tutor,
+  Attendance
   } = sequelize.models;
 
 //* Relaciones
@@ -76,8 +87,14 @@ Section.belongsToMany(Student, {through: "Student_Section"});
 Student.belongsToMany(Section, {through: "Student_Section"});
 
 //Un usuario por cada apoderado
+/* User.hasOne(Representative);
+Representative.belongsTo(User); */
 User.hasOne(Representative);
 Representative.belongsTo(User);
+
+//Un estudiante puede tener varios padres - Un padre puede tener varios hijos
+Parents.hasMany(Student);
+Student.belongsTo(Parents);
 
 //Un apoderdo representa a uno o más alumnos
 Representative.hasMany(Student);
@@ -94,8 +111,8 @@ Teacher.hasMany(Course);
 Course.belongsTo(Teacher)
 
 //Un Curso tiene muchos alumnos - Un alumno tiene muchos cursos //??? //!EVALUANDO, PROABLEMENTE NO
-Student.belongsToMany(Course, {through: "Student_Course"});
-Course.belongsToMany(Student, {through: "Student_Course"});
+/* Student.belongsToMany(Course, {through: "Student_Course"});
+Course.belongsToMany(Student, {through: "Student_Course"}); */
 
 //Un año escolar tiene muchos grados - Un grado tiene un año escolar
 Year.hasMany(Grade);
@@ -121,25 +138,32 @@ Course.belongsTo(Section);
 Course.hasMany(Schedules);
 Schedules.belongsTo(Course);
 
-//Una tarea pertenece a un profesor - un profesor pertenece a una tarea
-Teacher.hasOne(Homework);
+//Una tarea pertenece a un profesor - un profesor tiene varias tareas
+Teacher.hasMany(Homework);
 Homework.belongsTo(Teacher);
 
 //Un curso puede tener multiples tareas - una tarea pertenece a un curso
 Course.hasMany(Homework);
 Homework.belongsTo(Course);
 
+//Subida de clases => igual que homeworks
+Teacher.hasMany(Classes);
+Classes.belongsTo(Teacher);
+
+Course.hasMany(Classes);
+Classes.belongsTo(Course);
+
 //una calificación pertenece a un alumno - un alumno tiene varias calificaciones
-Student.hasMany(Calification);
-Calification.belongsTo(Student);
+Student.hasMany(Califications);
+Califications.belongsTo(Student);
 
 //Una calificacion pertenece a un profesor - un profesor hace varias calificaciones
-Teacher.hasMany(Calification);
-Calification.belongsTo(Teacher);
+Teacher.hasMany(Califications);
+Califications.belongsTo(Teacher);
 
 //Un curso tiene muchas calificaciones - una calificacion pertenece a un curso
-Course.hasMany(Calification);
-Calification.belongsTo(Course);
+Course.hasMany(Califications);
+Califications.belongsTo(Course);
 
 //un curso puede tener muchos registros inasistentes - un registro de inasistencia pertenece a un curso
 Course.hasMany(Absences);
@@ -148,6 +172,43 @@ Absences.belongsTo(Course);
 //un alumno puede tener muchos registros de inasistencias - un registro de inasistencia pertenece a un alumno 
 Student.hasMany(Absences);
 Absences.belongsTo(Student);
+
+//Notificaciones para alumnos y seccion
+Student.hasMany(StudentReleases);
+StudentReleases.belongsTo(Student);
+
+//Notificaciones para padres
+Representative.hasMany(ParentsReleases);
+ParentsReleases.belongsTo(Representative);
+
+//Notificaciones para secciones
+Section.hasMany(SectionReleases);
+SectionReleases.belongsTo(Section);
+
+//NOtificaciones para cursos
+Course.hasMany(CourseReleases);
+CourseReleases.belongsTo(Course);
+
+//Tutor
+User.hasOne(Tutor);
+Tutor.belongsTo(User);
+
+Tutor.hasMany(Section);
+Section.belongsTo(Tutor);
+
+//Repuesta de tareas
+Homework.hasMany(HomeworksAnswer);
+HomeworksAnswer.belongsTo(Homework);
+
+Student.hasOne(HomeworksAnswer);
+HomeworksAnswer.belongsTo(Student);
+
+//Asistencia
+Student.hasMany(Attendance);
+Attendance.belongsTo(Student);
+
+Section.hasMany(Attendance);
+Attendance.belongsTo(Section);
 
 module.exports = {
   ...sequelize.models,

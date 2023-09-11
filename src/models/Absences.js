@@ -5,6 +5,16 @@ module.exports = sequelize => {
     absences: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    justifiedFault:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
+    delays:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
     }
   },
   {
