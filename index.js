@@ -27,7 +27,28 @@ conn.sync({force: false})
 
       if(!findEle) await Rols.create(ele)
     })
-  
+  }())
+
+})
+
+.then( () => {
+
+  (async function () {
+
+    const userCheck = await User.findOne({
+      where: {
+        userName: "Ruben123"
+      }
+    })
+
+    if(!userCheck) {
+      
+      const encryptedPassword2 = await newPassword("1234");
+      const user2 = await User.create({userName: "Ruben123", password: encryptedPassword2});
+      user2.setRol(1);
+
+    }
+
   }())
 
 })
@@ -57,10 +78,6 @@ conn.sync({force: false})
   ( async function () {
 
     const encryptedPassword = await newPassword("1234");
-    const encryptedPassword2 = await newPassword("1234");
-
-    const user2 = await User.create({userName: "Ruben123", password: encryptedPassword2});
-    user2.setRol(1);
 
     const admin = await Administration.create({name: "soy", lastName: "lacomadreja" });
     await admin.setUser(1);
