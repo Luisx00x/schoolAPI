@@ -10,16 +10,18 @@ const {
   DB_DEPLOY_PASSWORD,
   DB_DEPLOY_HOST,
   DB_DEPLOY_PORT,
-  DB_DEPLOY_NAME
+  DB_DEPLOY_NAME,
+  DB_DEPLOY_USER
 } = process.env;
 
 const PASSWORD = DB_DEPLOY_PASSWORD || DB_PASSWORD;
 const HOST = DB_DEPLOY_HOST || DB_HOST;
 const PORT = DB_DEPLOY_PORT  || '';
 const NAME = DB_DEPLOY_NAME || 'school';
+const USER = DB_DEPLOY_USER || DB_USER;
 
 const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${PASSWORD}@${HOST}:${PORT}/${NAME}`,
+  `postgres://${USER}:${PASSWORD}@${HOST}:${PORT}/${NAME}?ssl=true`,
   {
     logging: false,
     native: false
