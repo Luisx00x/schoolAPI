@@ -25,7 +25,10 @@ conn.sync({force: false})
         }
       })
 
-      if(!findEle) await Rols.create(ele)
+      if(!findEle) {
+        await Rols.create(ele)
+        console.log("new Rol created!");
+      }
     })
   }())
 
@@ -46,6 +49,7 @@ conn.sync({force: false})
       const encryptedPassword2 = await newPassword("1234");
       const user2 = await User.create({userName: "Ruben123", password: encryptedPassword2});
       user2.setRol(1);
+      console.log("Admid created!");
 
     }
 
