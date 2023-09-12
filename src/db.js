@@ -21,7 +21,7 @@ const NAME = DB_DEPLOY_NAME || 'school';
 const USER = DB_DEPLOY_USER || DB_USER;
 
 const sequelize = new Sequelize(
-  `postgres://${USER}:${PASSWORD}@${HOST}:${PORT}/${NAME}?ssl=true`,
+  `postgres://${USER}:${PASSWORD}@${HOST}:${PORT}/${NAME}`,
   {
     logging: false,
     native: false
